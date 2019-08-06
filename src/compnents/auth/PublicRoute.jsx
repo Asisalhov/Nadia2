@@ -1,19 +1,8 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
-function PublicRoute({ component: Component, user, ...rest }) {
-  return (
-    <Route
-      {...rest}
-      render={props =>
-        user ? (
-          <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-        ) : (
-          <Component {...props} />
-        )
-      }
-    />
-  );
+function PublicRoute(Component, user) {
+  return !user ? Component : <Redirect to="/" />;
 }
 
 export default PublicRoute;

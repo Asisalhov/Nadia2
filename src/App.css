@@ -1,0 +1,60 @@
+body {
+  font-size: 15px;
+  font-family: "Source Sans Pro", sans-serif;
+  color: #43425d;
+}
+.main {
+  min-height: 100vh;
+}
+.login_card {
+  min-height: 100vh;
+  max-height: 100vh;
+}
+.login_sidebar {
+  padding: 0;
+  background: rgb(90, 85, 170);
+  background: linear-gradient(
+    45deg,
+    rgba(90, 85, 170, 1) 0%,
+    rgba(255, 101, 101, 1) 100%
+  );
+  overflow: hidden;
+}
+.login_path {
+  width: 100%;
+}
+.login_container {
+  width: 55%;
+}
+.login_title {
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+  font-size: 35px;
+}
+.login_sub_title {
+  font-weight: 300;
+}
+a.login_forget_password {
+  text-decoration: none;
+  color: #43425d;
+  font-weight: bold;
+}
+.login_input {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-radius: 0;
+  background: none;
+}
+.login_btn {
+  background-color: #43425d;
+}
+.login_input_inline {
+  display: inline-block;
+  width: 45%;
+}
+/* bootstrap overrite */
+.form-group {
+  margin-bottom: 2em;
+}

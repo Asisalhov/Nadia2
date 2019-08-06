@@ -1,6 +1,6 @@
 import React from "react";
 // router
-import { Router, Switch } from "react-router-dom";
+import { Router, Switch, Route } from "react-router-dom";
 import PrivateRoute from "./compnents/auth/PrivateRoute";
 import PublicRoute from "./compnents/auth/PublicRoute";
 import history from "./history";
@@ -10,6 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
 // components
+import { Container } from "reactstrap";
 // public
 import SignIn from "./compnents/auth/SignIn";
 import SignUp from "./compnents/auth/SignUp";
@@ -18,39 +19,37 @@ import Recover from "./compnents/auth/Recover";
 import Header from "./compnents/layout/Header";
 import SideMenu from "./compnents/layout/SideMenu";
 
+import UnderDev from "./compnents/layout/UnderDev";
 import Clients from "./compnents/clients";
 
 function App() {
-  const user = false;
   return (
     <Router history={history}>
-      {user ? <Panel user={user} /> : <Auth user={user} />}
+      <Switch>
+        {/* public routes */}
+        <Route path="/signin" exact component={SignIn} />
+        <Route path="/SignUp" exact component={SignUp} />
+        <Route path="/Recover" exact component={Recover} />
+        {/* private routes */}
+        <Route component={Panel} />
+      </Switch>
     </Router>
   );
 }
 
-const Panel = ({ user }) => {
+function Panel() {
   return (
-    <div>
+    <Container fluid>
       <Header />
       <div>
         <SideMenu />
         <Switch>
           {/* private routes */}
-          <PrivateRoute to="/clients" component={Clients} user={user} />
+          <Route path="/clients" component={Clients} />
+          <Route component={UnderDev} />
         </Switch>
       </div>
-    </div>
+    </Container>
   );
-};
-const Auth = ({ user }) => {
-  return (
-    <Switch>
-      {/* public routes */}
-      <PublicRoute to="/signin" user={user} component={SignIn} />
-      <PublicRoute to="/signup" user={user} component={SignUp} />
-      <PublicRoute to="/recover" user={user} component={Recover} />
-    </Switch>
-  );
-};
+}
 export default App;
