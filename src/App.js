@@ -1,8 +1,6 @@
 import React from "react";
 // router
 import { Router, Switch, Route } from "react-router-dom";
-import PrivateRoute from "./compnents/auth/PrivateRoute";
-import PublicRoute from "./compnents/auth/PublicRoute";
 import history from "./history";
 
 // style
@@ -39,15 +37,17 @@ function App() {
 
 function Panel() {
   return (
-    <Container fluid>
-      <Header />
-      <div>
-        <SideMenu />
-        <Switch>
-          {/* private routes */}
-          <Route path="/clients" component={Clients} />
-          <Route component={UnderDev} />
-        </Switch>
+    <Container fluid className="p-0 m-0 d-flex">
+      <SideMenu />
+      <div className="flex-fill ">
+        <Header />
+        <div className="content_container">
+          <Switch>
+            {/* private routes */}
+            <Route path="/clients" component={Clients} />
+            {/* <Route path="/" component={UnderDev} /> */}
+          </Switch>
+        </div>
       </div>
     </Container>
   );

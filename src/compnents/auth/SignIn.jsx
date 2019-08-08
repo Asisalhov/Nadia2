@@ -19,7 +19,7 @@ function SignIn() {
         <Col className="login_card login_sidebar">
           <img src={path} alt="path" className="login_path" />
         </Col>
-        <Col className="login_card d-flex flex-column justify-content-center align-items-center">
+        <Col className="login_card d-flex flex-column justify-content-center align-items-center bg-white">
           <div className="text-center pb-4">
             <h2 className="login_title">Nadia 2.0</h2>
             <p className="login_sub_title">
