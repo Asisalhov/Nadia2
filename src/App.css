@@ -145,6 +145,9 @@ a.login_forget_password {
   text-transform: uppercase;
   font-weight: bold;
   color: #a3a6b4;
+  padding: 0;
+  vertical-align: middle;
+  padding: 1.3em 0.75em;
 }
 .table_card_table td {
   vertical-align: middle;
