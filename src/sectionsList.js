@@ -13,7 +13,7 @@ import {
 export default [
   {
     text: "Home",
-    link: "/",
+    link: "/home",
     Icon: FaHome,
     new: false
   },

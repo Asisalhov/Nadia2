@@ -1,6 +1,17 @@
+import { GET_CLIENTS } from "../actions/types";
+
 const initialState = {
   clients: []
 };
 export default function(state = initialState, action) {
-  return state;
+  switch (action.type) {
+    case GET_CLIENTS:
+      return {
+        ...state,
+        clients: action.payload
+      };
+
+    default:
+      return state;
+  }
 }

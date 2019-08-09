@@ -4,5 +4,5 @@ import clientsReducer from "./clientsReducer";
 
 export default combineReducers({
   auth: authReducer,
-  client: clientsReducer
+  clients: clientsReducer
 });

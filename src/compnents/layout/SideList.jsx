@@ -5,7 +5,7 @@ function SideList({ sectionsList }) {
   return (
     <ListGroup className="sidemenu_list">
       {sectionsList.map((section, i) => (
-        <NavLink key={i} exact to={section.link}>
+        <NavLink key={i} to={section.link}>
           <ListGroupItem className={`sidemenu_list_item`}>
             <section.Icon /> <div>{section.text}</div>
           </ListGroupItem>
