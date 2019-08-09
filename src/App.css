@@ -4,6 +4,10 @@ body {
   color: #43425d;
   background-color: #f0f0f7;
 }
+svg {
+  height: 1em;
+  width: 1em;
+}
 .main {
   min-height: 100vh;
 }
@@ -63,6 +67,8 @@ a.login_forget_password {
 .sidemenu {
   min-height: 100vh;
   width: 260px;
+  max-width: 260px;
+  min-width: 260px;
   background-color: #43425d;
 }
 .logo {
@@ -124,13 +130,17 @@ a.login_forget_password {
 }
 .header_new_dropdown {
 }
-.header_new_dropdown_item {
+.header_new_dropdown_item,
+.header_new_dropdown_item a {
   color: #43425d;
 }
+
 .header_new_dropdown_item svg {
   margin: 0 0.5em;
 }
+.header_new_dropdown_item:hover a,
 .header_new_dropdown_item:hover {
+  text-decoration: none;
   color: #e9e9f0;
   background-color: #43425d;
 }

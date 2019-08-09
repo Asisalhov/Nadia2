@@ -1,5 +1,5 @@
 import React from "react";
-import { FaSearch } from "react-icons/fa";
+import { ReactComponent as SearchIcon } from "../../Icons/search.svg";
 import { Input, InputGroup, InputGroupAddon, InputGroupText } from "reactstrap";
 const CardSearch = () => {
   return (
@@ -9,7 +9,7 @@ const CardSearch = () => {
         className="d-flex align-items-center"
       >
         <InputGroupText>
-          <FaSearch />
+          <SearchIcon />
         </InputGroupText>
       </InputGroupAddon>
       <Input type="text" placeholder="Search client" />

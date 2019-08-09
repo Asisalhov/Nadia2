@@ -1,11 +1,13 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
   DropdownItem
 } from "reactstrap";
-import { FaUserCircle } from "react-icons/fa";
+import { ReactComponent as ProfilIcon } from "../../Icons/profil.svg";
+import { ReactComponent as DownIcon } from "../../Icons/down.svg";
 import sectionsList from "../../sectionsList";
 
 function Header() {
@@ -23,7 +25,9 @@ function Header() {
             .filter(section => section.new)
             .map((section, i) => (
               <DropdownItem key={i} className="header_new_dropdown_item">
-                <section.Icon /> {section.text}
+                <Link to={section.link + "/new"}>
+                  <section.Icon /> {section.text}
+                </Link>
               </DropdownItem>
             ))}
         </DropdownMenu>
@@ -33,8 +37,8 @@ function Header() {
           isOpen={profilDropDown}
           toggle={() => setProfilDropDown(!profilDropDown)}
         >
-          <DropdownToggle tag="span" caret>
-            Jhon smith
+          <DropdownToggle tag="span">
+            Jhon smith <DownIcon />
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem>Another Action</DropdownItem>
@@ -43,7 +47,7 @@ function Header() {
         </Dropdown>
       </div>
       <h2 className="d-flex align-items-center ">
-        <FaUserCircle />
+        <ProfilIcon />
       </h2>
     </div>
   );

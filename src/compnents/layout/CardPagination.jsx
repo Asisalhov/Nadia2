@@ -1,13 +1,14 @@
 import React from "react";
 import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { ReactComponent as RightArrow } from "../../Icons/right.svg";
+import { ReactComponent as LeftArrow } from "../../Icons/left.svg";
 
 const CardPagination = () => {
   return (
     <Pagination>
       <PaginationItem disabled>
         <PaginationLink href="#">
-          <FaChevronLeft />
+          <LeftArrow />
         </PaginationLink>
       </PaginationItem>
       <PaginationItem active>
@@ -27,7 +28,7 @@ const CardPagination = () => {
       </PaginationItem>
       <PaginationItem>
         <PaginationLink next href="#">
-          <FaChevronRight />
+          <RightArrow />
         </PaginationLink>
       </PaginationItem>
     </Pagination>
