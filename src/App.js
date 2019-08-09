@@ -3,6 +3,9 @@ import React from "react";
 import { Router, Switch, Route } from "react-router-dom";
 import history from "./history";
 
+// redux
+import store from "./store";
+import { Provider } from "react-redux";
 // style
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -17,21 +20,23 @@ import Recover from "./compnents/auth/Recover";
 import Header from "./compnents/layout/Header";
 import SideMenu from "./compnents/layout/SideMenu";
 
-import UnderDev from "./compnents/layout/UnderDev";
+// import UnderDev from "./compnents/layout/UnderDev";
 import Clients from "./compnents/clients";
 
 function App() {
   return (
-    <Router history={history}>
-      <Switch>
-        {/* public routes */}
-        <Route path="/signin" exact component={SignIn} />
-        <Route path="/SignUp" exact component={SignUp} />
-        <Route path="/Recover" exact component={Recover} />
-        {/* private routes */}
-        <Route component={Panel} />
-      </Switch>
-    </Router>
+    <Provider store={store}>
+      <Router history={history}>
+        <Switch>
+          {/* public routes */}
+          <Route path="/signin" exact component={SignIn} />
+          <Route path="/SignUp" exact component={SignUp} />
+          <Route path="/Recover" exact component={Recover} />
+          {/* private routes */}
+          <Route component={Panel} />
+        </Switch>
+      </Router>
+    </Provider>
   );
 }
 

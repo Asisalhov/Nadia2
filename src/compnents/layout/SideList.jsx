@@ -1,16 +1,15 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import { ListGroup, ListGroupItem } from "reactstrap";
 function SideList({ sectionsList }) {
   return (
     <ListGroup className="sidemenu_list">
-      {sectionsList.map(section => (
-        <ListGroupItem
-          className={`sidemenu_list_item ${
-            section.text === "Clients" ? "active" : ""
-          }`}
-        >
-          <section.Icon /> <div>{section.text}</div>
-        </ListGroupItem>
+      {sectionsList.map((section, i) => (
+        <NavLink key={i} exact to={section.link}>
+          <ListGroupItem className={`sidemenu_list_item`}>
+            <section.Icon /> <div>{section.text}</div>
+          </ListGroupItem>
+        </NavLink>
       ))}
     </ListGroup>
   );

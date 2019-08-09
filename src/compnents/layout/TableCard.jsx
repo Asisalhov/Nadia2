@@ -97,7 +97,10 @@ const CardPagination = () => {
 const CardSearch = () => {
   return (
     <InputGroup className="table_card_search ">
-      <InputGroupAddon className="d-flex align-items-center">
+      <InputGroupAddon
+        addonType="prepend"
+        className="d-flex align-items-center"
+      >
         <InputGroupText>
           <FaSearch />
         </InputGroupText>

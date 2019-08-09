@@ -19,49 +19,49 @@ export default [
   },
   {
     text: "Projects",
-    link: "/",
+    link: "/projects",
     Icon: FaPen,
     new: true
   },
   {
     text: "Payments",
-    link: "/",
+    link: "/payments",
     Icon: FaDollarSign,
     new: true
   },
   {
     text: "Reports",
-    link: "/",
+    link: "/reports",
     Icon: FaChartBar,
     new: true
   },
   {
     text: "Expenses",
-    link: "/",
+    link: "/exprenses",
     Icon: FaBoxes,
     new: true
   },
   {
     text: "Clients",
-    link: "/",
+    link: "/clients",
     Icon: FaUser,
     new: true
   },
   {
     text: "Suppliers",
-    link: "/",
+    link: "/suppliers",
     Icon: FaDolly,
     new: true
   },
   {
     text: "WorkLoad",
-    link: "/",
+    link: "/workload",
     Icon: FaTasks,
     new: false
   },
   {
     text: "Settings",
-    link: "/",
+    link: "/settings",
     Icon: FaCog,
     new: false
   }

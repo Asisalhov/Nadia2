@@ -21,8 +21,8 @@ function Header() {
         <DropdownMenu className="header_new_dropdown">
           {sectionsList
             .filter(section => section.new)
-            .map(section => (
-              <DropdownItem className="header_new_dropdown_item">
+            .map((section, i) => (
+              <DropdownItem key={i} className="header_new_dropdown_item">
                 <section.Icon /> {section.text}
               </DropdownItem>
             ))}
