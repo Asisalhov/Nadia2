@@ -3,7 +3,7 @@
     <style>
       .left-1 {
         fill: none;
-        stroke: #currentColor;
+        stroke: currentColor;
       }
     </style>
   </defs>

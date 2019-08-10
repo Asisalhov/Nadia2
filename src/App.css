@@ -1,5 +1,5 @@
 body {
-  font-size: 15px;
+  font-size: 13px;
   font-family: "Source Sans Pro", sans-serif;
   color: #43425d;
   background-color: #f0f0f7;
@@ -70,6 +70,7 @@ a.login_forget_password {
   max-width: 260px;
   min-width: 260px;
   background-color: #43425d;
+  font-size: 15px;
 }
 .logo {
   height: 70px;
@@ -149,6 +150,7 @@ a.login_forget_password {
   background-color: white;
   margin: 2rem 0;
   padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+  font-size: 13px;
   /* overflow-x: scroll; */
 }
 .table_card_table {
@@ -157,15 +159,31 @@ a.login_forget_password {
   /* min-height: 400px; */
 }
 .table_card_table input {
-  height: 25px;
-  /* min-height: 400px; */
+  height: 25px !important;
+  padding: 0 0.3rem;
+  font-size: 13px;
+}
+.table_card_table select {
+  height: 25px !important;
+  padding: 0 0.2rem;
+  font-size: 13px;
 }
 .table_card_table tr {
   max-height: 56px;
-  /* vertical-align: top; */
+}
+.table_card_header {
+  color: #43425d;
+  font-size: 1.2rem;
+}
+.table_card_header a {
+  color: #43425d;
 }
 
-.table_card_table th {
+a.btn-circle {
+  color: #fff;
+}
+.table_card_table th,
+.table_header_item {
   text-transform: uppercase;
   font-weight: bold;
   color: #a3a6b4;
@@ -178,7 +196,8 @@ a.login_forget_password {
 }
 
 .table_card tr:nth-of-type(even),
-.table_card thead {
+.table_card thead,
+.table_header {
   background-color: #f5f6fa;
 }
 .table_card_search,
@@ -196,11 +215,18 @@ a.login_forget_password {
   background-color: #43425d;
   margin-left: auto;
 }
+
 .table-card-badge {
   margin: 0 0.4em;
-  padding: 0.4em 1em;
+  padding: 0.4em 1.2em;
 }
 
+.client_project_header {
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #a3a6b4;
+  font-size: 13px;
+}
 /* bootstrap overrite */
 .form-group {
   margin-bottom: 2em;
@@ -232,4 +258,13 @@ a.login_forget_password {
 }
 .badge-success {
   background-color: #4ad991;
+}
+.btn-circle {
+  width: 2rem;
+  height: 2rem;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.2rem;
 }

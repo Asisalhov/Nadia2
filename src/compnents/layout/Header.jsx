@@ -38,15 +38,22 @@ function Header() {
           toggle={() => setProfilDropDown(!profilDropDown)}
         >
           <DropdownToggle tag="span">
-            Jhon smith <DownIcon />
+            Jhon smith{" "}
+            <span
+              style={{
+                color: "#A4AFB7",
+                paddingLeft: "0.2em"
+              }}
+            >
+              <DownIcon />
+            </span>
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem>Another Action</DropdownItem>
-            <DropdownItem>Another Action</DropdownItem>
+            <DropdownItem>SignOut</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
-      <h2 className="d-flex align-items-center ">
+      <h2 className="d-flex align-items-center">
         <ProfilIcon />
       </h2>
     </div>

@@ -3,13 +3,11 @@ import { Switch, Route } from "react-router-dom";
 import ClientsList from "./ClientsList";
 import NewClient from "./NewClient";
 import ClientDetails from "./ClientDetails";
-import EditClient from "./EditClient";
 
 function Index() {
   return (
     <Switch>
       <Route exact path="/clients/new" component={NewClient} />
-      <Route exact path="/clients/:id/Edit" component={EditClient} />
       <Route exact path="/clients/:id" component={ClientDetails} />
       <Route exact path="/clients" component={ClientsList} />
     </Switch>
