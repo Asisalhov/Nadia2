@@ -22,6 +22,8 @@ import SideMenu from "./compnents/layout/SideMenu";
 
 // import UnderDev from "./compnents/layout/UnderDev";
 import Clients from "./compnents/clients";
+import PrivateRoute from "./compnents/auth/PrivateRoute";
+import PublicRoute from "./compnents/auth/PublicRoute";
 
 function App() {
   return (
@@ -29,11 +31,23 @@ function App() {
       <Router history={history}>
         <Switch>
           {/* public routes */}
-          <Route path="/signin" exact component={SignIn} />
-          <Route path="/SignUp" exact component={SignUp} />
-          <Route path="/Recover" exact component={Recover} />
+          <Route
+            path="/signin"
+            exact
+            render={() => <PublicRoute component={SignIn} />}
+          />
+          <Route
+            path="/SignUp"
+            exact
+            render={() => <PublicRoute component={SignUp} />}
+          />
+          <Route
+            path="/Recover"
+            exact
+            render={() => <PublicRoute component={Recover} />}
+          />
           {/* private routes */}
-          <Route component={Panel} />
+          <Route render={() => <PrivateRoute component={Panel} />} />
         </Switch>
       </Router>
     </Provider>
@@ -57,4 +71,5 @@ function Panel() {
     </Container>
   );
 }
+
 export default App;

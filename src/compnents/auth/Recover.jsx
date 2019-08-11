@@ -1,8 +1,31 @@
-import React from "react";
-import { Container, Row, Col, FormGroup, Input, Button } from "reactstrap";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { sendRecoverCode } from "../../actions/authActions";
+import {
+  Container,
+  Row,
+  Col,
+  FormGroup,
+  Input,
+  Button,
+  Alert
+} from "reactstrap";
 
 import path from "./path.svg";
-function Recover() {
+function Recover({ sendRecoverCode, recoverMsg }) {
+  const [email, setEmail] = useState("");
+  const [done, setDone] = useState(false);
+  const sendRecCode = async e => {
+    e.preventDefault();
+    setDone(true);
+    await sendRecoverCode(email);
+  };
+
+  useEffect(() => {
+    if (recoverMsg && recoverMsg.error) {
+      setDone(false);
+    }
+  }, [recoverMsg]);
   return (
     <Container fluid>
       <Row>
@@ -16,22 +39,39 @@ function Recover() {
               Enter your email and we send you a password reset link.
             </p>
           </div>
-          <form className="login_container">
-            <FormGroup>
-              {/* <Label>Username</Label> */}
-              <Input type="email" placeholder="Email" className="login_input" />
-            </FormGroup>
+          {recoverMsg && (
+            <Alert color={recoverMsg.error ? "danger" : "success"}>
+              {recoverMsg.message}
+            </Alert>
+          )}
+          <form className="login_container" onSubmit={sendRecCode}>
+            <fieldset disabled={done}>
+              <FormGroup>
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  className="login_input"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                />
+              </FormGroup>
 
-            <div className="mt-5 text-center">
-              <Button className="px-4 py-2 login_btn mx-auto">
-                Send request
-              </Button>
-            </div>
+              <div className="mt-5 text-center">
+                <Button className="px-4 py-2 login_btn mx-auto">
+                  Send request
+                </Button>
+              </div>
+            </fieldset>
           </form>
         </Col>
       </Row>
     </Container>
   );
 }
-
-export default Recover;
+const mapStateToProps = state => ({
+  recoverMsg: state.auth.recoverMsg
+});
+export default connect(
+  mapStateToProps,
+  { sendRecoverCode }
+)(Recover);

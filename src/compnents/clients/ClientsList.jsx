@@ -20,7 +20,9 @@ function ClientsList({ clients, getClients }) {
     };
     getData();
   }, [getClients]);
+
   const redirectToClientDetails = id => history.push(`/clients/${id}`);
+
   return (
     <div>
       <h3>Clients</h3>

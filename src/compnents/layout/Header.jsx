@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import { logout } from "../../actions/authActions";
 import { Link } from "react-router-dom";
 import {
   Dropdown,
@@ -10,9 +12,12 @@ import { ReactComponent as ProfilIcon } from "../../Icons/profil.svg";
 import { ReactComponent as DownIcon } from "../../Icons/down.svg";
 import sectionsList from "../../sectionsList";
 
-function Header() {
+function Header({ logout }) {
   const [newDropDown, setNewDropDown] = useState(false);
   const [profilDropDown, setProfilDropDown] = useState(false);
+  const handleLogout = () => {
+    logout();
+  };
   return (
     <div className="header shadow-sm border-bottom d-flex justify-content-end">
       <Dropdown
@@ -49,7 +54,7 @@ function Header() {
             </span>
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem>SignOut</DropdownItem>
+            <DropdownItem onClick={logout}>SignOut</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
@@ -60,4 +65,9 @@ function Header() {
   );
 }
 
-export default Header;
+export default connect(
+  null,
+  {
+    logout
+  }
+)(Header);

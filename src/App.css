@@ -62,7 +62,9 @@ a.login_forget_password {
   display: inline-block;
   width: 45%;
 }
-
+.login_container .form-group {
+  padding: 0;
+}
 /* sidemenu */
 .sidemenu {
   min-height: 100vh;
