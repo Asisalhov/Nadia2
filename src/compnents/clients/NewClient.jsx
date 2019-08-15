@@ -60,7 +60,7 @@ function NewClient({ addClient }) {
   } = newClient;
   return (
     <div>
-      <h3>Clients</h3>
+      <h3>New client</h3>
       <form onSubmit={onSubmit}>
         <TableCard>
           <div className="d-flex justify-content-between table_card_header">

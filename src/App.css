@@ -229,6 +229,12 @@ a.btn-circle {
   color: #a3a6b4;
   font-size: 13px;
 }
+.new_project label {
+  font-size: 15px;
+  text-align: left;
+  padding-left: 0;
+  padding-right: 0;
+}
 /* bootstrap overrite */
 .form-group {
   margin-bottom: 2em;
