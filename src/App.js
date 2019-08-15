@@ -22,6 +22,7 @@ import SideMenu from "./compnents/layout/SideMenu";
 
 // import UnderDev from "./compnents/layout/UnderDev";
 import Clients from "./compnents/clients";
+import Projects from "./compnents/projects";
 import PrivateRoute from "./compnents/auth/PrivateRoute";
 import PublicRoute from "./compnents/auth/PublicRoute";
 
@@ -64,6 +65,7 @@ function Panel() {
           <Switch>
             {/* private routes */}
             <Route path="/clients" component={Clients} />
+            <Route path="/projects" component={Projects} />
             {/* <Route path="/" component={UnderDev} /> */}
           </Switch>
         </div>

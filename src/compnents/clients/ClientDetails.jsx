@@ -40,7 +40,6 @@ function ClientDetails({ client, getClient, match, editClient }) {
   }, [getClient, match.params]);
 
   const onSubmit = async () => {
-    console.log("hi");
     setLoading(true);
     const { id } = match.params;
     const updClient = {
@@ -82,7 +81,7 @@ function ClientDetails({ client, getClient, match, editClient }) {
       <TableCard>
         <div className="d-flex justify-content-between table_card_header">
           <div className="d-flex">
-            <h4 className="mr-3">Google</h4>
+            <h4 className="mr-3">{client.name}</h4>
             <Button
               size="lg"
               className={`btn-circle table-card-button mr-2 ${

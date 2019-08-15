@@ -12,12 +12,10 @@ import { ReactComponent as ProfilIcon } from "../../Icons/profil.svg";
 import { ReactComponent as DownIcon } from "../../Icons/down.svg";
 import sectionsList from "../../sectionsList";
 
-function Header({ logout }) {
+function Header({ logout, auth }) {
   const [newDropDown, setNewDropDown] = useState(false);
   const [profilDropDown, setProfilDropDown] = useState(false);
-  const handleLogout = () => {
-    logout();
-  };
+
   return (
     <div className="header shadow-sm border-bottom d-flex justify-content-end">
       <Dropdown
@@ -43,7 +41,7 @@ function Header({ logout }) {
           toggle={() => setProfilDropDown(!profilDropDown)}
         >
           <DropdownToggle tag="span">
-            Jhon smith{" "}
+            {auth.diplayName}
             <span
               style={{
                 color: "#A4AFB7",
@@ -64,9 +62,11 @@ function Header({ logout }) {
     </div>
   );
 }
-
+const mapStateToProps = state => ({
+  auth: state.firebase.auth
+});
 export default connect(
-  null,
+  mapStateToProps,
   {
     logout
   }
