@@ -27,7 +27,9 @@ clients {
 projects {
   project_name,
   client_id,
-  owner_id : ??? user id ?????*********
+client_name,
+  owner_id : ??? user id ?????
+owner_name*********
   currency,
   commissions *********** ,
   buisiness model,

@@ -103,7 +103,12 @@ function NewProject() {
                   Business modle
                 </Label>
                 <Col sm={8}>
-                  <Input type="select" name="select" id="exampleSelect" />
+                  <Input type="select" name="select" id="exampleSelect">
+                    <option>Time & material - monthly</option>
+                    <option>Time & material - milestone</option>
+                    <option>Fixed</option>
+                    <option>Retainer</option>
+                  </Input>
                 </Col>
               </FormGroup>
             </div>
@@ -137,6 +142,26 @@ function NewProject() {
                   />
                 </Col>
               </FormGroup>
+            </div>
+          </div>
+          <div className="d-flex w-100 justify-content-end ">
+            <div className="py-2">
+              <Button
+                style={{
+                  width: "70px"
+                }}
+                className="table-card-button ml-3"
+              >
+                Cancel
+              </Button>
+              <Button
+                style={{
+                  width: "70px"
+                }}
+                className="table-card-button "
+              >
+                Save
+              </Button>
             </div>
           </div>
         </Form>
