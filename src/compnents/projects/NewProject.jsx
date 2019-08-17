@@ -1,171 +1,36 @@
-import React from "react";
-import {
-  Col,
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  FormText,
-  CustomInput
-} from "reactstrap";
-import TableCard from "../layout/TableCard";
+import React, { useState } from "react";
+
+import NewProjectBasic from "./NewProjectBasic";
+import NewProjectFixed from "./NewProjectFixed";
+import NewProjectRetainer from "./NewProjectRetainer";
+import NewProjectTM from "./NewProjectTM";
 
 function NewProject() {
+  // this is a steped form , we will have 2 steps
+  const [step, setStep] = useState(1);
+  const [buissModle, setBuissModle] = useState(1);
+
+  let Content = null;
+  switch (buissModle) {
+    case 1:
+      Content = NewProjectFixed;
+      break;
+    case 2:
+      Content = NewProjectRetainer;
+      break;
+    case 3:
+      Content = NewProjectTM;
+      break;
+    default:
+      Content = NewProjectBasic;
+      break;
+  }
   return (
     <div>
-      <h3>New Project</h3>
-      <TableCard className="w-100">
-        <Form>
-          <div className="d-flex new_project">
-            <div className="w-50">
-              <FormGroup row>
-                <Label for="project_name" sm={4}>
-                  Project name
-                </Label>
-                <Col sm={8}>
-                  <Input
-                    type="text"
-                    name="project_name"
-                    id="project_name"
-                    placeholder="Project name"
-                  />
-                </Col>
-              </FormGroup>
-
-              <FormGroup row>
-                <Label for="client" sm={4}>
-                  Client
-                </Label>
-                <Col sm={8}>
-                  <Input
-                    type="text"
-                    name="client"
-                    id="client"
-                    placeholder="client"
-                  />
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label for="owner" sm={4}>
-                  Owner
-                </Label>
-                <Col sm={8}>
-                  <Input
-                    type="text"
-                    name="owner"
-                    id="owner"
-                    placeholder="owner"
-                  />
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label for="currnecy" sm={4}>
-                  Currency
-                </Label>
-                <Col sm={8}>
-                  <Input
-                    type="text"
-                    name="currnecy"
-                    id="currnecy"
-                    placeholder="ILS"
-                  />
-                  <FormText color="muted">ILS,USD,EUR,GBP,RMB</FormText>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label for="currnecy" sm={4}>
-                  Commissions
-                </Label>
-                <Col sm={4}>
-                  <Input
-                    type="text"
-                    name="currnecy"
-                    id="currnecy"
-                    placeholder="ILS"
-                  />
-                </Col>
-                <Col sm={4}>
-                  <Input
-                    type="text"
-                    name="currnecy"
-                    id="currnecy"
-                    placeholder="ILS"
-                  />
-                </Col>
-                <FormText color="muted">
-                  Commission added to modeling and subcontractor work
-                </FormText>
-              </FormGroup>
-
-              <FormGroup row>
-                <Label for="exampleSelect" sm={4}>
-                  Business modle
-                </Label>
-                <Col sm={8}>
-                  <Input type="select" name="select" id="exampleSelect">
-                    <option>Time & material - monthly</option>
-                    <option>Time & material - milestone</option>
-                    <option>Fixed</option>
-                    <option>Retainer</option>
-                  </Input>
-                </Col>
-              </FormGroup>
-            </div>
-            <div className="w-50">
-              <FormGroup row>
-                <Label for="exampleFile" sm={3}>
-                  Attachments
-                </Label>
-                <Col sm={9}>
-                  <Input type="file" name="file" id="exampleFile" />
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label for="exampleFile" sm={3}>
-                  Comments
-                </Label>
-                <Col sm={9}>
-                  <Input type="textarea" />
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label for="exampleFile" sm={3}>
-                  Material & SubCon Billing
-                </Label>
-                <Col sm={9} className="d-flex">
-                  <CustomInput
-                    type="checkbox"
-                    className="align-self-center"
-                    id="exampleCustomInline2"
-                    inline
-                  />
-                </Col>
-              </FormGroup>
-            </div>
-          </div>
-          <div className="d-flex w-100 justify-content-end ">
-            <div className="py-2">
-              <Button
-                style={{
-                  width: "70px"
-                }}
-                className="table-card-button ml-3"
-              >
-                Cancel
-              </Button>
-              <Button
-                style={{
-                  width: "70px"
-                }}
-                className="table-card-button "
-              >
-                Save
-              </Button>
-            </div>
-          </div>
-        </Form>
-      </TableCard>
+      <h3>
+        New Project <small>- client name</small>
+      </h3>
+      <Content />
     </div>
   );
 }
