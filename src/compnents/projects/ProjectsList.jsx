@@ -51,13 +51,13 @@ function ProjectsList({ projects, getProjects }) {
 
           {!loading ? (
             <tbody>
-              {projects.map(
+              {[1, 2, 3, 4, 5].map(
                 ({
-                  id,
-                  project_name,
-                  client_name,
-                  owner_name,
-                  attachments
+                  id = 1,
+                  project_name = "google mini home",
+                  client_name = "google",
+                  owner_name = "Boaz Zemer",
+                  attachments = true
                 }) => (
                   <tr
                     key={id}

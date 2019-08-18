@@ -153,11 +153,18 @@ a.login_forget_password {
   margin: 2rem 0;
   padding: 1.5rem 1.5rem 0.5rem 1.5rem;
   font-size: 15px;
+
   /* overflow-x: scroll; */
+}
+.table_card label {
+  font-size: 15px;
+  text-transform: capitalize;
 }
 .table_card_table {
   margin: 1rem 0;
   font-size: 13px;
+  max-width: 76vw;
+  overflow: hidden;
   /* min-height: 400px; */
 }
 .table_card_table input {
@@ -192,6 +199,7 @@ a.btn-circle {
   padding: 0;
   vertical-align: middle;
   padding: 1.3em 0.75em;
+  white-space: nowrap;
 }
 .table_card_table td {
   vertical-align: middle;
@@ -234,6 +242,49 @@ a.btn-circle {
   text-align: left;
   padding-left: 0;
   padding-right: 0;
+}
+
+/* home */
+
+.home_card {
+  background: #ffffff;
+  padding: 0.5em 1.5em;
+  min-width: 300px;
+}
+.home_card_up {
+  padding: 0.7rem 1.5rem;
+  width: 240px;
+  height: 70px;
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+  background: #4ad991;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.home_card_down {
+  padding: 0.7rem 1.5rem;
+  width: 240px;
+  height: 70px;
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+  background: #e04b4b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* settings*/
+.settigns_card {
+  width: 165px;
+  height: 165px;
+  border-radius: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 300px;
 }
 /* bootstrap overrite */
 .form-group {

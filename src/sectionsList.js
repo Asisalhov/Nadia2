@@ -35,7 +35,7 @@ export default [
   },
   {
     text: "Expenses",
-    link: "/exprenses",
+    link: "/expenses",
     Icon: Expense,
     new: true
   },

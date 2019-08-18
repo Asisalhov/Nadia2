@@ -1,7 +1,7 @@
 import React from "react";
 import { ReactComponent as SearchIcon } from "../../Icons/search.svg";
 import { Input, InputGroup, InputGroupAddon, InputGroupText } from "reactstrap";
-const CardSearch = () => {
+const CardSearch = ({ title = "" }) => {
   return (
     <InputGroup className="table_card_search ">
       <InputGroupAddon
@@ -12,7 +12,7 @@ const CardSearch = () => {
           <SearchIcon />
         </InputGroupText>
       </InputGroupAddon>
-      <Input type="text" placeholder="Search client" />
+      <Input type="text" placeholder={"Search " + title} />
     </InputGroup>
   );
 };

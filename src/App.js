@@ -22,9 +22,14 @@ import SideMenu from "./compnents/layout/SideMenu";
 
 // import UnderDev from "./compnents/layout/UnderDev";
 import Clients from "./compnents/clients";
+import Payments from "./compnents/payments/Payments";
 import Projects from "./compnents/projects";
+import Expenses from "./compnents/expenses";
+import Suppliers from "./compnents/suppliers";
+import Settings from "./compnents/settings";
 import PrivateRoute from "./compnents/auth/PrivateRoute";
 import PublicRoute from "./compnents/auth/PublicRoute";
+import Home from "./compnents/home/Home";
 
 function App() {
   return (
@@ -66,6 +71,11 @@ function Panel() {
             {/* private routes */}
             <Route path="/clients" component={Clients} />
             <Route path="/projects" component={Projects} />
+            <Route path="/payments" component={Payments} />
+            <Route path="/expenses" component={Expenses} />
+            <Route path="/suppliers" component={Suppliers} />
+            <Route path="/settings" component={Settings} />
+            <Route path="/home" component={Home} />
             {/* <Route path="/" component={UnderDev} /> */}
           </Switch>
         </div>
