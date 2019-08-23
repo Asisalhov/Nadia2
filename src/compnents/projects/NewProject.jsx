@@ -9,28 +9,47 @@ function NewProject() {
   // this is a steped form , we will have 2 steps
   const [step, setStep] = useState(1);
   const [buissModle, setBuissModle] = useState(1);
+  const [projectData, setProjectData] = useState({});
+  let StepTwo = null;
 
-  let Content = null;
+  // <option value="TM_monthly">Time & material - monthly</option>
+  // <option value="TM_Milestone">
+  //   Time & material - milestone
+  // </option>
+  // <option value="fixed">Fixed</option>
+  // <option value="retainer">Retainer</option>
+
   switch (buissModle) {
-    case 1:
-      Content = NewProjectFixed;
+    case "TM_monthly":
+    case "TM_Milestone":
+      StepTwo = NewProjectTM;
       break;
-    case 2:
-      Content = NewProjectRetainer;
+    case "retainer":
+      StepTwo = NewProjectRetainer;
       break;
-    case 3:
-      Content = NewProjectTM;
+    case "fixed":
+      StepTwo = NewProjectFixed;
       break;
     default:
-      Content = NewProjectBasic;
+      StepTwo = NewProjectBasic;
       break;
   }
+
   return (
     <div>
       <h3>
         New Project <small>- client name</small>
       </h3>
-      <Content />
+      {step === 1 ? (
+        <NewProjectBasic
+          data={projectData}
+          setData={setProjectData}
+          setBuissModle={setBuissModle}
+          setStep={setStep}
+        />
+      ) : (
+        <StepTwo data={projectData} setData={setProjectData} />
+      )}
     </div>
   );
 }
