@@ -40,8 +40,8 @@ function Header({ logout, auth }) {
           isOpen={profilDropDown}
           toggle={() => setProfilDropDown(!profilDropDown)}
         >
-          <DropdownToggle tag="span">
-            {auth.diplayName}
+          <DropdownToggle tag="span" className="text-capitalize">
+            {auth.displayName}
             <span
               style={{
                 color: "#A4AFB7",
