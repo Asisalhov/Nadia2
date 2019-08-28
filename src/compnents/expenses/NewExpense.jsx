@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
 import { connect } from "react-redux";
+import { getClients } from "../../actions/clientsActions";
+import { withFormik, Field, Form } from "formik";
+import * as Yup from "yup";
+
 // import { addExpense } from "../../actions/expensesActions";
 import TableCard from "../layout/TableCard";
 // reactstrap
@@ -11,57 +14,13 @@ import { ReactComponent as Done } from "../../Icons/done.svg";
 import { ReactComponent as Edit } from "../../Icons/edit.svg";
 import { ReactComponent as Close } from "../../Icons/close.svg";
 
-function NewExpense() {
+function NewExpense({ handleChange, values }) {
   const [loading, setLoading] = useState(false);
-  const [newExpense, setNewExpense] = useState({
-    official_name: "",
-    number: "",
-    contact_person: "",
-    phone_number: "",
-    email: "",
-    address: "",
-    country: "",
-    finance_contact: "",
-    finance_email: "",
-    currency: "",
-    payment_terms: "",
-    send_invoice_auto: false
-  });
 
-  const onInputChange = e =>
-    setNewExpense({
-      ...newExpense,
-      [e.target.name]: e.target.value
-    });
-  const onCheckboxChange = e =>
-    setNewExpense({
-      ...newExpense,
-      [e.target.id]: e.target.checked
-    });
-
-  const onSubmit = e => {
-    // e.preventDefault();
-    // setLoading(true);
-    // addExpense(newExpense);
-  };
-  const {
-    official_name,
-    number,
-    contact_person,
-    phone_number,
-    email,
-    address,
-    country,
-    finance_contact,
-    finance_email,
-    currency,
-    payment_terms,
-    send_invoice_auto
-  } = newExpense;
   return (
     <div>
       <h3>New expense</h3>
-      <form onSubmit={onSubmit}>
+      <Form>
         <TableCard>
           <div className="d-flex justify-content-between table_card_header">
             <div className="d-flex">
@@ -105,69 +64,52 @@ function NewExpense() {
               <tbody>
                 <tr>
                   <td width="13%">
+                    <Input type="date" tag={Field} name="handling_date" />
+                  </td>
+                  <td width="10%">
                     <Input
-                      onChange={onInputChange}
-                      name="official_name"
-                      value={official_name}
-                      required
+                      tag={Field}
+                      component="select"
+                      type="select"
+                      name="supplier_id"
+                      onChange={handleChange}
                     />
                   </td>
                   <td width="10%">
                     <Input
-                      onChange={onInputChange}
-                      name="number"
-                      value={number}
-                      required
-                    />
-                  </td>
-                  <td width="10%">
-                    <Input
-                      onChange={onInputChange}
-                      name="number"
-                      value={number}
-                      required
+                      tag={Field}
+                      component="select"
+                      type="select"
+                      name="client_id"
+                      onChange={handleChange}
                     />
                   </td>
                   <td width="15%">
                     <Input
-                      onChange={onInputChange}
-                      name="contact_person"
-                      value={contact_person}
-                      required
+                      tag={Field}
+                      component="select"
+                      type="select"
+                      name="project_id"
+                      onChange={handleChange}
                     />
                   </td>
                   <td width="14%">
-                    <Input
-                      onChange={onInputChange}
-                      name="phone_number"
-                      value={phone_number}
-                      required
-                    />
+                    <Input tag={Field} name="details" />
                   </td>
                   <td width="13%">
                     <Input
-                      onChange={onInputChange}
-                      name="email"
-                      type="email"
-                      value={email}
-                      required
+                      tag={Field}
+                      component="select"
+                      type="select"
+                      name="owner_id"
+                      onChange={handleChange}
                     />
                   </td>
                   <td width="15%">
-                    <Input
-                      onChange={onInputChange}
-                      name="address"
-                      value={address}
-                      required
-                    />
+                    <Input tag={Field} name="status" />
                   </td>
                   <td width="10%">
-                    <Input
-                      onChange={onInputChange}
-                      name="country"
-                      value={country}
-                      required
-                    />
+                    <Input tag={Field} name="charge_client" />
                   </td>
                 </tr>
               </tbody>
@@ -187,62 +129,32 @@ function NewExpense() {
               <tbody>
                 <tr>
                   <td width="13%">
-                    <Input
-                      onChange={onInputChange}
-                      name="official_name"
-                      value={official_name}
-                      required
-                    />
+                    <Input tag={Field} name="invoice_date" type="date" />
                   </td>
                   <td width="10%">
-                    <Input
-                      onChange={onInputChange}
-                      name="number"
-                      value={number}
-                      required
-                    />
+                    <Input tag={Field} name="cost" />
                   </td>
 
                   <td width="15%">
-                    <Input
-                      onChange={onInputChange}
-                      name="contact_person"
-                      value={contact_person}
-                      required
-                    />
+                    <Input tag={Field} name="cost_client" />
                   </td>
                   <td width="14%">
                     <Input
-                      onChange={onInputChange}
-                      name="phone_number"
-                      value={phone_number}
-                      required
+                      tag={Field}
+                      component="select"
+                      type="select"
+                      name="type"
+                      onChange={handleChange}
                     />
                   </td>
                   <td width="13%">
-                    <Input
-                      onChange={onInputChange}
-                      name="email"
-                      type="email"
-                      value={email}
-                      required
-                    />
+                    <Input tag={Field} name="performa_invoice" />
                   </td>
                   <td width="20%">
-                    <Input
-                      onChange={onInputChange}
-                      name="address"
-                      value={address}
-                      required
-                    />
+                    <Input tag={Field} name="tax_invoice" />
                   </td>
                   <td width="15%">
-                    <Input
-                      onChange={onInputChange}
-                      name="country"
-                      value={country}
-                      required
-                    />
+                    <Input tag={Field} name="internal_po" />
                   </td>
                 </tr>
               </tbody>
@@ -258,13 +170,14 @@ function NewExpense() {
                     <div className="d-flex justify-content-around align-items-center">
                       <div>Client charged for hours</div>
                       <CustomInput
-                        onChange={onCheckboxChange}
+                        onChange={handleChange}
                         label
+                        tag={Field}
                         size="lg"
                         type="checkbox"
-                        id="send_invoice_auto"
-                        name="send_invoice_auto"
-                        checked={send_invoice_auto}
+                        id="client_charged_for_hours"
+                        name="client_charged_for_hours"
+                        checked={values.client_charged_for_hours}
                       />
                     </div>
                   </th>
@@ -276,11 +189,11 @@ function NewExpense() {
                 <tr>
                   <td width="13%">
                     <Input
-                      onChange={onInputChange}
+                      tag={Field}
+                      component="select"
                       type="select"
-                      name="payment_terms"
-                      value={payment_terms}
-                      required
+                      name="currency"
+                      onChange={handleChange}
                     >
                       <option value="USD">USD</option>
                       <option value="NIS">NIS</option>
@@ -291,11 +204,11 @@ function NewExpense() {
                   </td>
                   <td colSpan="2">
                     <Input
-                      onChange={onInputChange}
+                      tag={Field}
+                      component="select"
                       type="select"
                       name="payment_terms"
-                      value={payment_terms}
-                      required
+                      onChange={handleChange}
                     >
                       <option value="CASH">CASH</option>
                       <option value="EOM + 30">EOM + 30</option>
@@ -308,21 +221,48 @@ function NewExpense() {
                   </td>
 
                   <td width="15%">
-                    <Input
-                      onChange={onInputChange}
-                      name="currency"
-                      value={currency}
-                      required
-                    />
+                    <Input tag={Field} name="invoice_img" />
                   </td>
                 </tr>
               </tbody>
             </Table>
           </fieldset>
         </TableCard>
-      </form>
+      </Form>
     </div>
   );
 }
 
-export default NewExpense;
+const CompWithFormik = withFormik({
+  mapPropsToValues: () => ({
+    handling_date: "",
+    supplier_id: "",
+    client_id: "",
+    project_id: "ILS",
+    owner_id: "",
+    status: "",
+    charge_client: "",
+    invoice_date: "",
+    cost: "",
+    cost_client: "",
+    performa_invoice: "",
+    tax_invoice: "",
+    internal_po: "",
+    currency: "",
+    payment_terms: "",
+    invoice_img: ""
+  }),
+  handleSubmit: (values, { props, setSubmitting }) => {
+    // props.setBuissModle(values.business_modle);
+    // props.setBuissModle(values.business_modle);
+    // props.setData({ ...props.data, ...values });
+    // props.setStep(2);
+    // setSubmitting(false);
+  },
+  validationSchema: Yup.object().shape({})
+})(NewExpense);
+const mapStateToProps = state => ({ clients: state.clients.clients });
+export default connect(
+  mapStateToProps,
+  { getClients }
+)(CompWithFormik);

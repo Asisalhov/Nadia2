@@ -22,6 +22,7 @@ function Home() {
           <tbody>
             {[1, 2, 3, 4, 5].map(_ => (
               <tr
+                key={_}
                 style={{
                   cursor: "pointer"
                 }}

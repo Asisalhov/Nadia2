@@ -31,6 +31,10 @@ import PrivateRoute from "./compnents/auth/PrivateRoute";
 import PublicRoute from "./compnents/auth/PublicRoute";
 import Home from "./compnents/home/Home";
 
+import { getToken } from "./utils/greenInvoice";
+import { getMe, getProjects } from "./utils/asana";
+// getProjects();
+// getToken();
 function App() {
   return (
     <Provider store={store}>
