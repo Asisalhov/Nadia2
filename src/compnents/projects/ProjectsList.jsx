@@ -51,35 +51,49 @@ function ProjectsList({ projects, getProjects }) {
 
           {!loading ? (
             <tbody>
-              {[1, 2, 3, 4, 5].map(
+              {projects.map(
                 ({
-                  id = 1,
+                  id,
                   project_name = "google mini home",
                   client_name = "google",
                   owner_name = "Boaz Zemer",
-                  attachments = true
+                  attachment,
+                  asanaData: { name, owner, due_date, current_status, color }
                 }) => (
-                  <tr
-                    key={id}
-                    onClick={() => redirectToProjectDetails(id)}
-                    style={{
-                      cursor: "pointer"
-                    }}
-                  >
-                    <td>{project_name}</td>
+                  <tr key={id}>
+                    <td
+                      style={{
+                        cursor: "pointer"
+                      }}
+                      onClick={() => redirectToProjectDetails(id)}
+                    >
+                      {name}
+                    </td>
                     <td>{client_name}</td>
-                    <td>{owner_name}</td>
+                    <td>{owner.name}</td>
                     <td>
-                      <Badge color="success" pill className="table-card-badge">
-                        Done
+                      <Badge
+                        color="primary"
+                        style={{
+                          backgroundColor:
+                            current_status && current_status.color,
+                          color: "#4d4f5c"
+                        }}
+                        pill
+                        className="table-card-badge"
+                      >
+                        {(current_status && current_status.text) || "-"}
                       </Badge>
                     </td>
-                    <td>11/10/2018</td>
+                    <td>{due_date || "-"}</td>
                     <td>
                       <a
-                        href={attachments}
+                        href={attachment}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        disabled={!attachment}
                         style={{
-                          color: `${attachments ? "#A3A6B4" : "#E9E9F0"}`,
+                          color: `${attachment ? "#A3A6B4" : "#E9E9F0"}`,
                           fontSize: "1.5em"
                         }}
                       >

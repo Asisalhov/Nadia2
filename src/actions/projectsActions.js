@@ -15,13 +15,39 @@ export const getProjects = () => (
   return firestore
     .collection("projects")
     .get()
-    .then(snapshot => {
-      const projects = snapshot.docs.map(async doc => {
+    .then(async snapshot => {
+      const projectsP = snapshot.docs.map(async doc => {
         const project = { id: doc.id, ...doc.data() };
-        const asanaData = await asana.projects.findById(project.asanaProjectID);
-        console.log(asanaData);
+        project.asanaData = await asana.projects.findById(
+          project.asanaProjectID
+        );
+        console.log(project.asanaData);
+        return project;
       });
-
+      // archived: false
+      // color: null
+      // created_at: "2019-09-01T01:28:07.035Z"
+      // current_status: null
+      // custom_fields: []
+      // due_date: null
+      // due_on: null
+      // followers: [{…}]
+      // gid: "1137974439660807"
+      // id: 1137974439660807
+      // is_template: false
+      // layout: "board"
+      // members: [{…}]
+      // modified_at: "2019-09-01T01:28:13.920Z"
+      // name: "new project"
+      // notes: "comments"
+      // owner: {id: 1137029218328833, gid: "1137029218328833", name: "Mustapha lounici", resource_type: "user"}
+      // public: true
+      // resource_type: "project"
+      // section_migration_status: "completed"
+      // start_on: null
+      // workspace: {id: 1137029220879543, gid: "1137029220879543", name: "nadia", resource_type: "workspace"}
+      // __proto__: Object
+      const projects = await Promise.all(projectsP);
       dispatch({
         type: GET_PROJECTS,
         payload: projects
