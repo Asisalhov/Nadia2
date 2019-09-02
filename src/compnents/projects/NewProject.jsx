@@ -1,23 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+import { connect } from "react-redux";
+import { addProject } from "../../actions/projectsActions";
+import { getUsers } from "../../actions/usersActions";
+import { getClients } from "../../actions/clientsActions";
 
 import NewProjectBasic from "./NewProjectBasic";
 import NewProjectFixed from "./NewProjectFixed";
 import NewProjectRetainer from "./NewProjectRetainer";
 import NewProjectTM from "./NewProjectTM";
 
-function NewProject() {
+function NewProject({ addProject, getUsers, getClients }) {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      await getUsers();
+      await getClients();
+      setLoading(false);
+    };
+
+    getData();
+  }, [getClients, getUsers]);
+
   // this is a steped form , we will have 2 steps
   const [step, setStep] = useState(1);
   const [buissModle, setBuissModle] = useState(1);
   const [projectData, setProjectData] = useState({});
   let StepTwo = null;
 
-  // <option value="TM_monthly">Time & material - monthly</option>
-  // <option value="TM_Milestone">
-  //   Time & material - milestone
-  // </option>
-  // <option value="fixed">Fixed</option>
-  // <option value="retainer">Retainer</option>
+  const createProject = data => {
+    addProject(data);
+  };
 
   switch (buissModle) {
     case "TM_monthly":
@@ -34,7 +49,7 @@ function NewProject() {
       StepTwo = NewProjectBasic;
       break;
   }
-
+  if (loading) return null;
   return (
     <div>
       <h3>
@@ -48,10 +63,17 @@ function NewProject() {
           setStep={setStep}
         />
       ) : (
-        <StepTwo data={projectData} setData={setProjectData} />
+        <StepTwo
+          data={projectData}
+          setData={setProjectData}
+          createProject={createProject}
+        />
       )}
     </div>
   );
 }
 
-export default NewProject;
+export default connect(
+  null,
+  { addProject, getUsers, getClients }
+)(NewProject);

@@ -1,34 +1,68 @@
 import asana from "asana";
 import config from "../config/apis";
 const { asana_token } = config;
-const client = asana.Client.create().useAccessToken(asana_token);
+
+/**
+ * Asana API
+ * used for :
+ * Projects managment :
+ *  CURD.
+ *  tasks or paheses : CURD,
+ *
+ *
+ *
+ */
+
+export const client = asana.Client.create().useAccessToken(asana_token);
+
 export const getMe = () => {
   client.users.me().then(function(me) {
     console.log(me);
   });
 };
+// projects **********
+
 export const getProjects = async () => {
   const res = await client.workspaces.findAll();
-  console.log(res.data);
   const workplace = res.data[0];
+
   const projectsRes = await client.projects.findByWorkspace(workplace.id);
-  console.log(projectsRes.data);
   return projectsRes.data;
 };
 
 export const createProject = async data => {
+  const { name, notes, due_date, owner } = data;
   const res = await client.workspaces.findAll();
   const workplace = res.data[0];
 
-  const projectsRes = await client.projects.createInWorkspace(workplace, data);
-  console.log(projectsRes.data);
-  return projectsRes.data;
+  const projectsRes = await client.projects.createInWorkspace(workplace.id, {
+    name,
+    notes,
+    color: "light-green",
+    current_status: { color: "green", text: "new" }
+    // owner
+  });
+  // await client.projects.addMembers(projectsRes.gid, [owner]);
+  console.log({ projectsRes });
+  return projectsRes;
 };
-export const createTask = async (projectid, data) => {
+
+/// tasks
+export const createTasks = async ({ projectID, data }) => {
   const res = await client.workspaces.findAll();
   const workplace = res.data[0];
   // add the project id in the data object
-  const projectsRes = await client.tasks.createInWorkspace(workplace, data);
-  console.log(projectsRes.data);
-  return projectsRes.data;
+  // client.tasks.addProject();
+  let tasksP = data.map(async ({ name, owner, due_date, hours, number }) => {
+    const task = await client.tasks.createInWorkspace(workplace.id, {
+      name,
+      due_on: due_date
+    });
+    await client.tasks.addProject(task.gid, { project: projectID });
+    return task;
+  });
+
+  const tasks = await Promise.all(tasksP);
+
+  return tasks;
 };

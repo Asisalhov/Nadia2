@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getClients } from "../../actions/clientsActions";
@@ -11,7 +11,8 @@ import {
   Label,
   Input,
   FormText,
-  CustomInput
+  CustomInput,
+  FormFeedback
 } from "reactstrap";
 import TableCard from "../layout/TableCard";
 
@@ -20,24 +21,18 @@ function NewProjectBasic({
   setData,
   setBuissModle,
   clients,
-  getClients,
   users,
   errors,
   touched,
   values,
   handleChange
 }) {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      await getClients();
-      setLoading(false);
-    };
-    getData();
-  }, [getClients]);
+  const [fileName, setFileName] = useState(null);
 
-  if (loading) return null;
+  const handleFileChange = e => {
+    values.attachment = e.target.files[0];
+    if (e.target.files[0]) setFileName(e.target.files[0].name);
+  };
   return (
     <TableCard className="w-100">
       <Form>
@@ -55,6 +50,7 @@ function NewProjectBasic({
                   placeholder="Project name"
                   invalid={errors.project_name && touched.project_name}
                 />
+                <FormFeedback>{errors.project_name}</FormFeedback>
               </Col>
             </FormGroup>
 
@@ -69,7 +65,11 @@ function NewProjectBasic({
                   type="select"
                   name="client_id"
                   onChange={handleChange}
+                  invalid={errors.client_id && touched.client_id}
                 >
+                  <option key={1} value="">
+                    Select Client
+                  </option>
                   {clients &&
                     clients.map(client => (
                       <option key={client.id} value={client.id}>
@@ -77,10 +77,11 @@ function NewProjectBasic({
                       </option>
                     ))}
                 </Input>
+                <FormFeedback>{errors.client_id}</FormFeedback>
               </Col>
             </FormGroup>
             <FormGroup row>
-              <Label for="owner_id" sm={4}>
+              <Label for="owner" sm={4}>
                 Owner
               </Label>
               <Col sm={8}>
@@ -88,11 +89,21 @@ function NewProjectBasic({
                   tag={Field}
                   component="select"
                   type="select"
-                  name="owner_id"
+                  name="owner"
                   onChange={handleChange}
+                  invalid={errors.owner && touched.owner}
                 >
-                  {users && users.map(user => <option>{user.name}</option>)}
+                  <option key={1} value="">
+                    Select owner
+                  </option>
+                  {users &&
+                    users.map(user => (
+                      <option value={user.email}>
+                        {user.firstName} {user.lastName}
+                      </option>
+                    ))}
                 </Input>
+                <FormFeedback>{errors.owner}</FormFeedback>
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -105,6 +116,7 @@ function NewProjectBasic({
                   component="select"
                   type="select"
                   name="currnecy"
+                  invalid={errors.currnecy && touched.currnecy}
                   onChange={handleChange}
                 >
                   <option value="ILS">ILS</option>
@@ -114,6 +126,7 @@ function NewProjectBasic({
                   <option value="RMB">RMB</option>
                 </Input>
                 <FormText color="muted">ILS,USD,EUR,GBP,RMB</FormText>
+                <FormFeedback>{errors.currnecy}</FormFeedback>
               </Col>
             </FormGroup>
             <FormGroup row>
@@ -126,15 +139,21 @@ function NewProjectBasic({
                   type="text"
                   name="commission_local"
                   placeholder="local"
+                  invalid={errors.commission_local && touched.commission_local}
                 />
+                <FormFeedback>{errors.commission_local}</FormFeedback>
               </Col>
               <Col sm={4}>
-                <Field
-                  component={Input}
+                <Input
+                  tag={Field}
                   type="text"
                   name="commission_import"
                   placeholder="import"
+                  invalid={
+                    errors.commission_import && touched.commission_import
+                  }
                 />
+                <FormFeedback>{errors.commission_import}</FormFeedback>
               </Col>
               <FormText color="muted">
                 Commission added to modeling and subcontractor work
@@ -151,6 +170,7 @@ function NewProjectBasic({
                   onChange={handleChange}
                   component="select"
                   type="select"
+                  invalid={errors.business_modle && touched.business_modle}
                   name="business_modle"
                 >
                   <option value="TM_monthly">Time & material - monthly</option>
@@ -160,21 +180,23 @@ function NewProjectBasic({
                   <option value="fixed">Fixed</option>
                   <option value="retainer">Retainer</option>
                 </Input>
+                <FormFeedback>{errors.business_modle}</FormFeedback>
               </Col>
             </FormGroup>
           </div>
+
           <div className="w-50">
             <FormGroup row>
-              <Label for="attachment" sm={3}>
+              <Label for="attachmentInput" sm={3}>
                 Attachments
               </Label>
               <Col sm={9}>
                 <CustomInput
-                  tag={Field}
                   type="file"
-                  className="pl-2"
                   name="attachment"
-                  id="attachment"
+                  label={fileName || "choose file"}
+                  id="attachmentInput"
+                  onChange={handleFileChange}
                 />
               </Col>
             </FormGroup>
@@ -242,26 +264,35 @@ const CompWithFormik = withFormik({
   mapPropsToValues: () => ({
     project_name: "test",
     client_id: "",
-    owner_id: "",
+    owner: "",
     currnecy: "ILS",
     commission_local: "",
     commission_import: "",
     business_modle: "TM_monthly",
-    attachment: "",
+    attachment: null,
     comments: "",
     material_subcon_billing: true
   }),
   handleSubmit: (values, { props, setSubmitting }) => {
     props.setBuissModle(values.business_modle);
-    props.setBuissModle(values.business_modle);
     props.setData({ ...props.data, ...values });
     props.setStep(2);
     setSubmitting(false);
-  },
-  validationSchema: Yup.object().shape({})
+  }
+  // validationSchema: Yup.object().shape({
+  //   project_name: Yup.string("Enter Project Name").required(
+  //     "Project Name is Required"
+  //   ),
+  //   commission_import: Yup.string().required("This Field is Required"),
+  //   commission_local: Yup.string().required("This Field is Required"),
+  //   client_id: Yup.string("Select a client").required("Client Is Required"),
+  //   owner: Yup.string("Select an Owner").required("Owner Is Required"),
+  //   currnecy: Yup.string("Select a currnecy").required("currnecy Is Required"),
+  //   business_modle: Yup.string().required("This Field is Required")
+  // })
 })(NewProjectBasic);
-const mapStateToProps = state => ({ clients: state.clients.clients });
-export default connect(
-  mapStateToProps,
-  { getClients }
-)(CompWithFormik);
+const mapStateToProps = state => ({
+  clients: state.clients.clients,
+  users: state.users.users
+});
+export default connect(mapStateToProps)(CompWithFormik);

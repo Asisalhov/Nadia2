@@ -4,10 +4,12 @@ import clientsReducer from "./clientsReducer";
 // import { firestoreReducer } from "redux-firestore";
 import { firebaseReducer } from "react-redux-firebase";
 import projectsReducer from "./projectsReducer";
+import usersReducer from "./usersReducer";
 export default combineReducers({
   auth: authReducer,
   clients: clientsReducer,
   projects: projectsReducer,
+  users: usersReducer,
   // firestore: firestoreReducer, // for realtime data
   firebase: firebaseReducer
 });

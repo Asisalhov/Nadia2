@@ -7,6 +7,7 @@ import history from "./history";
 import store from "./store";
 import { Provider } from "react-redux";
 // style
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
@@ -31,11 +32,11 @@ import PrivateRoute from "./compnents/auth/PrivateRoute";
 import PublicRoute from "./compnents/auth/PublicRoute";
 import Home from "./compnents/home/Home";
 
-import { getToken } from "./utils/greenInvoice";
-import { getMe, getProjects } from "./utils/asana";
-// getProjects();
-// getToken();
+import { verifyGreenInvoiceToken } from "./actions/authActions";
+
 function App() {
+  // verify token
+  verifyGreenInvoiceToken();
   return (
     <Provider store={store}>
       <Router history={history}>

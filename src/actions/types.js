@@ -1,3 +1,5 @@
+export const GET_USERS = "GET_USERS";
+
 export const GET_CLIENTS = "GET_CLIENTS";
 export const GET_CLIENT = "GET_CLIENT";
 export const EDIT_CLIENT = "EDIT_CLIENT";

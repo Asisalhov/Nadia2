@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState, useRef } from "react";
+// import { Link } from "react-router-dom";
+import uid from "uid";
 import { connect } from "react-redux";
 import { getClients } from "../../actions/clientsActions";
 import { withFormik, Field, Form } from "formik";
@@ -7,9 +8,38 @@ import * as Yup from "yup";
 
 import TableCard from "../layout/TableCard";
 
-import { FormGroup, FormText, Input, Col, Label, Button } from "reactstrap";
+import {
+  FormGroup,
+  FormText,
+  Input,
+  Col,
+  Label,
+  Button,
+  FormFeedback
+} from "reactstrap";
+import Phases from "./Phases";
 
-function NewProjectTM() {
+function NewProjectTM({ values, handleSubmit, errors, touched }) {
+  const [phases, setPhases] = useState([
+    { id: "1", number: "1", name: "", owner: "", hours: "", due_Date: "" }
+  ]);
+  const addPhase = () => {
+    setPhases([
+      ...phases,
+      {
+        id: uid(),
+        number: "",
+        name: "",
+        owner: "",
+        hours: "",
+        due_Date: ""
+      }
+    ]);
+  };
+  useEffect(() => {
+    values.phases = phases;
+  }, [phases]);
+
   return (
     <div>
       <Form>
@@ -22,48 +52,62 @@ function NewProjectTM() {
             <Col sm={2}>
               <Input
                 type="text"
+                invalid={
+                  errors.product_designer_rate && touched.product_designer_rate
+                }
                 name="product_designer_rate"
                 id="product_designer_rate"
                 placeholder="Product designer"
                 tag={Field}
               />
               <FormText>Hourly rates</FormText>
+              <FormFeedback>{errors.product_designer_rate}</FormFeedback>
             </Col>
             <Col sm={2}>
               <Input
                 type="text"
                 tag={Field}
+                invalid={errors.mec_designer_rate && touched.mec_designer_rate}
                 name="mec_designer_rate"
                 id="mec_designer_rate"
                 placeholder="Mechanical Designer"
               />
+              <FormFeedback>{errors.mec_designer_rate}</FormFeedback>
             </Col>
             <Col sm={2}>
               <Input
                 type="text"
                 tag={Field}
+                invalid={
+                  errors.digital_designer_rate && touched.digital_designer_rate
+                }
                 name="digital_designer_rate"
                 id="digital_designer_rate"
                 placeholder="Digital designer"
               />
+              <FormFeedback>{errors.digital_designer_rate}</FormFeedback>
             </Col>
             <Col sm={2}>
               <Input
                 type="text"
                 tag={Field}
                 name="vp_rate"
+                invalid={errors.vp_rate && touched.vp_rate}
                 id="vp_rate"
                 placeholder="VP"
               />
+              <FormFeedback>{errors.vp_rate}</FormFeedback>
             </Col>
             <Col sm={2}>
               <Input
                 tag={Field}
                 type="text"
                 name="partner_rate"
+                invalid={errors.partner_rate && touched.partner_rate}
                 id="partner_rate"
                 placeholder="Partner"
               />
+              <FormFeedback>{errors.partner_rate}</FormFeedback>
             </Col>
           </FormGroup>
           <FormGroup row>
@@ -73,9 +117,11 @@ function NewProjectTM() {
                 type="text"
                 tag={Field}
                 name="monthly_fee"
+                invalid={errors.monthly_fee && touched.monthly_fee}
                 id="monthly_fee"
-                placeholder="Amount due P/Month "
+                placeholder="Amount due P/Month"
               />
+              <FormFeedback>{errors.monthly_fee}</FormFeedback>
             </Col>
           </FormGroup>
           <FormGroup row>
@@ -86,18 +132,24 @@ function NewProjectTM() {
                 tag={Field}
                 name="po_number"
                 id="po_number"
+                invalid={errors.po_number && touched.po_number}
                 placeholder="Number"
               />
+              <FormFeedback>{errors.po_number}</FormFeedback>
+
               <FormText>From Client</FormText>
             </Col>
             <Col sm={2}>
               <Input
                 type="text"
                 tag={Field}
+                invalid={errors.po_hours && touched.po_hours}
                 name="po_hours"
                 id="po_hours"
                 placeholder="Hours"
               />
+              <FormFeedback>{errors.po_hours}</FormFeedback>
+
               <FormText>Hours in existing PO</FormText>
             </Col>
             <Label sm={2}>Down-payment fee</Label>
@@ -105,85 +157,20 @@ function NewProjectTM() {
               <Input
                 type="text"
                 tag={Field}
+                invalid={errors.down_payment_fee && touched.down_payment_fee}
                 name="down_payment_fee"
                 id="down_payment_fee"
                 placeholder="amount due"
               />
               <FormText>Form Contract/po</FormText>
+              <FormFeedback>{errors.down_payment_fee}</FormFeedback>
             </Col>
           </FormGroup>
         </TableCard>
 
         <TableCard>
-          <h5>Phases</h5>
-          <FormGroup row>
-            <Col sm={2}>
-              <Input type="text" placeholder="Number" />
-            </Col>
-            <Col sm={4}>
-              <Input type="text" placeholder="Phase Name" />
-            </Col>
-            <Col sm={2}>
-              <Input type="text" placeholder="Phase Owner" />
-            </Col>
-            <Col sm={2}>
-              <Input type="text" placeholder="Hours (max)" />
-            </Col>
-            <Col sm={2}>
-              <Input type="text" placeholder="Due Date" />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col sm={2}>
-              <Input type="text" placeholder="Number" />
-            </Col>
-            <Col sm={4}>
-              <Input type="text" placeholder="Phase Name" />
-            </Col>
-            <Col sm={2}>
-              <Input type="text" placeholder="Phase Owner" />
-            </Col>
-            <Col sm={2}>
-              <Input type="text" placeholder="Hours (max)" />
-            </Col>
-            <Col sm={2}>
-              <Input type="text" placeholder="Due Date" />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col sm={2}>
-              <Input type="text" placeholder="Number" />
-            </Col>
-            <Col sm={4}>
-              <Input type="text" placeholder="Phase Name" />
-            </Col>
-            <Col sm={2}>
-              <Input type="text" placeholder="Phase Owner" />
-            </Col>
-            <Col sm={2}>
-              <Input type="text" placeholder="Hours (max)" />
-            </Col>
-            <Col sm={2}>
-              <Input type="text" placeholder="Due Date" />
-            </Col>
-          </FormGroup>
-          <FormGroup row>
-            <Col sm={2}>
-              <Input type="text" placeholder="Number" />
-            </Col>
-            <Col sm={4}>
-              <Input type="text" placeholder="Phase Name" />
-            </Col>
-            <Col sm={2}>
-              <Input type="text" placeholder="Phase Owner" />
-            </Col>
-            <Col sm={2}>
-              <Input type="text" placeholder="Hours (max)" />
-            </Col>
-            <Col sm={2}>
-              <Input type="text" placeholder="Due Date" />
-            </Col>
-          </FormGroup>
+          <Phases phases={phases} setPhases={setPhases} />
+
           <FormGroup>
             <div className="d-flex w-100 justify-content-between">
               <div className="py-2">
@@ -191,6 +178,7 @@ function NewProjectTM() {
                   style={{
                     height: "35px"
                   }}
+                  onClick={addPhase}
                   className="table-card-button ml-0"
                 >
                   Add Row
@@ -237,14 +225,34 @@ const CompWithFormik = withFormik({
     down_payment_fee: ""
   }),
   handleSubmit: (values, { props, setSubmitting }) => {
-    console.log(values);
-    // props.setBuissModle(values.business_modle);
-    // props.setBuissModle(values.business_modle);
-    // props.setData(...props.data, ...values);
-    // props.setStep(2);
-    // setSubmitting(false);
+    values.phases = values.phases.filter(phase => phase.name && phase.due_Date);
+    props.setData({ ...props.data, ...values });
+    props.createProject({ ...props.data, ...values });
+    setSubmitting(false);
   },
-  validationSchema: Yup.object().shape({})
+  validationSchema: Yup.object().shape({
+    product_designer_rate: Yup.number()
+      .positive()
+      .required("This Field is Required"),
+    mec_designer_rate: Yup.number()
+      .positive()
+      .required("This Field is Required"),
+    digital_designer_rate: Yup.number()
+      .positive()
+      .required("This Field is Required"),
+    vp_rate: Yup.number()
+      .positive()
+      .required("This Field is Required"),
+    partner_rate: Yup.number()
+      .positive()
+      .required("This Field is Required"),
+    monthly_fee: Yup.number()
+      .positive()
+      .required("This Field is Required"),
+    po_number: Yup.string().required("This Field is Required"),
+    po_hours: Yup.number().required("This Field is Required"),
+    down_payment_fee: Yup.string().required("This Field is Required")
+  })
 })(NewProjectTM);
 const mapStateToProps = state => ({ clients: state.clients.clients });
 export default connect(
