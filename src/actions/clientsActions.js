@@ -1,5 +1,9 @@
 import { GET_CLIENTS, ADD_CLIENT, GET_CLIENT, EDIT_CLIENT } from "./types";
 import history from "../history";
+import {
+  createClient as createTogglClient,
+  getTogglClientProjects
+} from "../utils/toggl";
 export const getClients = () => (
   dispatch,
   getState,
@@ -9,11 +13,13 @@ export const getClients = () => (
   return firestore
     .collection("clients")
     .get()
-    .then(snapshot => {
-      const clients = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+    .then(async snapshot => {
+      const clientP = snapshot.docs.map(async doc => {
+        const client = { id: doc.id, ...doc.data() };
+        client.projects = await getTogglClientProjects(client.togglID);
+        return client;
+      });
+      const clients = await Promise.all(clientP);
       dispatch({
         type: GET_CLIENTS,
         payload: clients
@@ -37,11 +43,16 @@ export const getClient = id => (
       });
     });
 };
-export const addClient = newClient => (
+export const addClient = newClient => async (
   dispatch,
   getState,
   { getFirebase, getFirestore }
 ) => {
+  const togglClient = await createTogglClient({
+    name: newClient.official_name
+  });
+  newClient.togglID = togglClient.id;
+
   const firestore = getFirestore();
   return firestore
     .collection("clients")

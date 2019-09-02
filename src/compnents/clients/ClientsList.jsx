@@ -59,15 +59,19 @@ function ClientsList({ clients, getClients }) {
                     <td>{number}</td>
                     <td>{contact_person}</td>
                     <td className="text-center">
-                      {["google", "facebook", "fiverr"].map(a => (
-                        <Badge
-                          color="success"
-                          pill
-                          className="table-card-badge"
-                        >
-                          {a}
-                        </Badge>
-                      ))}
+                      {projects
+                        .filter(p => p.active)
+                        .map(p => (
+                          <Badge
+                            style={{
+                              backgroundColor: p.hex_color
+                            }}
+                            pill
+                            className="table-card-badge"
+                          >
+                            {p.name}
+                          </Badge>
+                        ))}
                     </td>
                   </tr>
                 )

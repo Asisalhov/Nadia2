@@ -66,3 +66,17 @@ export const createTasks = async ({ projectID, data }) => {
 
   return tasks;
 };
+/// task
+export const createTask = async ({ projectID, data }) => {
+  const res = await client.workspaces.findAll();
+  const workplace = res.data[0];
+
+  const { name, owner, due_date, hours, number } = data;
+  const task = await client.tasks.createInWorkspace(workplace.id, {
+    name,
+    due_on: due_date
+  });
+
+  await client.tasks.addProject(task.gid, { project: projectID });
+  return task;
+};

@@ -4,64 +4,22 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { addClient } from "../../actions/clientsActions";
 import TableCard from "../layout/TableCard";
+import { withFormik, Field, Form } from "formik";
+import * as Yup from "yup";
 // reactstrap
-import { Table, Input, CustomInput, Button } from "reactstrap";
+import { Table, Input, CustomInput, Button, FormFeedback } from "reactstrap";
 // icons
 import { ReactComponent as Done } from "../../Icons/done.svg";
 import { ReactComponent as Edit } from "../../Icons/edit.svg";
 import { ReactComponent as Close } from "../../Icons/close.svg";
 
-function NewClient({ addClient }) {
+function NewClient({ addClient, values, touched, errors, handleChange }) {
   const [loading, setLoading] = useState(false);
-  const [newClient, setNewClient] = useState({
-    official_name: "",
-    number: "",
-    contact_person: "",
-    phone_number: "",
-    email: "",
-    address: "",
-    country: "",
-    finance_contact: "",
-    finance_email: "",
-    currency: "",
-    payment_terms: "",
-    send_invoice_auto: false
-  });
 
-  const onInputChange = e =>
-    setNewClient({
-      ...newClient,
-      [e.target.name]: e.target.value
-    });
-  const onCheckboxChange = e =>
-    setNewClient({
-      ...newClient,
-      [e.target.id]: e.target.checked
-    });
-
-  const onSubmit = e => {
-    e.preventDefault();
-    setLoading(true);
-    addClient(newClient);
-  };
-  const {
-    official_name,
-    number,
-    contact_person,
-    phone_number,
-    email,
-    address,
-    country,
-    finance_contact,
-    finance_email,
-    currency,
-    payment_terms,
-    send_invoice_auto
-  } = newClient;
   return (
     <div>
       <h3>New client</h3>
-      <form onSubmit={onSubmit}>
+      <Form>
         <TableCard>
           <div className="d-flex justify-content-between table_card_header">
             <div className="d-flex">
@@ -105,60 +63,60 @@ function NewClient({ addClient }) {
                 <tr>
                   <td width="13%">
                     <Input
-                      onChange={onInputChange}
                       name="official_name"
-                      value={official_name}
-                      required
+                      invalid={errors.official_name && touched.official_name}
+                      tag={Field}
                     />
+                    <FormFeedback>{errors.official_name}</FormFeedback>
                   </td>
                   <td width="10%">
                     <Input
-                      onChange={onInputChange}
                       name="number"
-                      value={number}
-                      required
+                      invalid={errors.number && touched.number}
+                      tag={Field}
                     />
+                    <FormFeedback>{errors.number}</FormFeedback>
                   </td>
                   <td width="15%">
                     <Input
-                      onChange={onInputChange}
                       name="contact_person"
-                      value={contact_person}
-                      required
+                      invalid={errors.contact_person && touched.contact_person}
+                      tag={Field}
                     />
+                    <FormFeedback>{errors.contact_person}</FormFeedback>
                   </td>
                   <td width="14%">
                     <Input
-                      onChange={onInputChange}
                       name="phone_number"
-                      value={phone_number}
-                      required
+                      invalid={errors.phone_number && touched.phone_number}
+                      tag={Field}
                     />
+                    <FormFeedback>{errors.phone_number}</FormFeedback>
                   </td>
                   <td width="13%">
                     <Input
-                      onChange={onInputChange}
                       name="email"
+                      invalid={errors.email && touched.email}
+                      tag={Field}
                       type="email"
-                      value={email}
-                      required
                     />
+                    <FormFeedback>{errors.email}</FormFeedback>
                   </td>
                   <td width="26%">
                     <Input
-                      onChange={onInputChange}
                       name="address"
-                      value={address}
-                      required
+                      invalid={errors.address && touched.address}
+                      tag={Field}
                     />
+                    <FormFeedback>{errors.address}</FormFeedback>
                   </td>
                   <td width="8%">
                     <Input
-                      onChange={onInputChange}
                       name="country"
-                      value={country}
-                      required
+                      invalid={errors.country && touched.country}
+                      tag={Field}
                     />
+                    <FormFeedback>{errors.country}</FormFeedback>
                   </td>
                 </tr>
               </tbody>
@@ -175,13 +133,14 @@ function NewClient({ addClient }) {
                     <div className="d-flex justify-content-around align-items-center">
                       <div>send invoice automaticaly</div>
                       <CustomInput
-                        onChange={onCheckboxChange}
                         label
+                        value={values.send_invoice_auto}
+                        checked={values.send_invoice_auto}
+                        onChange={handleChange}
                         size="lg"
                         type="checkbox"
                         id="send_invoice_auto"
                         name="send_invoice_auto"
-                        checked={send_invoice_auto}
                       />
                     </div>
                   </th>
@@ -193,37 +152,48 @@ function NewClient({ addClient }) {
                 <tr>
                   <td width="13%">
                     <Input
-                      onChange={onInputChange}
                       name="finance_contact"
-                      value={finance_contact}
-                      required
-                    />
+                      invalid={
+                        errors.finance_contact && touched.finance_contact
+                      }
+                      tag={Field}
+                    />{" "}
+                    <FormFeedback>{errors.finance_contact}</FormFeedback>
                   </td>
                   <td colSpan="2">
                     <Input
-                      onChange={onInputChange}
                       name="finance_email"
                       type="email"
-                      value={finance_email}
                       className="w-75"
-                      required
-                    />
+                      invalid={errors.finance_email && touched.finance_email}
+                      tag={Field}
+                    />{" "}
+                    <FormFeedback>{errors.finance_email}</FormFeedback>
                   </td>
                   <td width="15%">
                     <Input
-                      onChange={onInputChange}
-                      name="currency"
-                      value={currency}
-                      required
-                    />
+                      tag={Field}
+                      component="select"
+                      type="select"
+                      name="currnecy"
+                      invalid={errors.currnecy && touched.currnecy}
+                      onChange={handleChange}
+                    >
+                      <option value="ILS">ILS</option>
+                      <option value="USD">USD</option>
+                      <option value="EUR">EUR</option>
+                      <option value="GBP">GBP</option>
+                      <option value="RMB">RMB</option>
+                    </Input>
+                    <FormFeedback>{errors.currency}</FormFeedback>
                   </td>
                   <td width="13%">
                     <Input
-                      onChange={onInputChange}
                       type="select"
+                      component="select"
+                      invalid={errors.payment_terms && touched.payment_terms}
                       name="payment_terms"
-                      value={payment_terms}
-                      required
+                      tag={Field}
                     >
                       <option value="CASH">CASH</option>
                       <option value="EOM + 30">EOM + 30</option>
@@ -232,7 +202,8 @@ function NewClient({ addClient }) {
                       <option value="NET + 30">NET + 30</option>
                       <option value="NET + 60">NET + 60</option>
                       <option value="NET + 90">NET + 90</option>
-                    </Input>
+                    </Input>{" "}
+                    <FormFeedback>{errors.payment_terms}</FormFeedback>
                   </td>
                   <td />
                 </tr>
@@ -240,14 +211,49 @@ function NewClient({ addClient }) {
             </Table>
           </fieldset>
         </TableCard>
-      </form>
+      </Form>
     </div>
   );
 }
-
+const CompWithFormik = withFormik({
+  mapPropsToValues: () => ({
+    official_name: "",
+    number: "",
+    contact_person: "",
+    phone_number: "",
+    email: "",
+    address: "",
+    country: "",
+    send_invoice_auto: false,
+    finance_contact: "",
+    finance_email: "",
+    currency: "ILS",
+    payment_terms: "CASH"
+  }),
+  handleSubmit: (values, { props, setSubmitting }) => {
+    props.addClient(values);
+  },
+  validationSchema: Yup.object().shape({
+    official_name: Yup.string().required("This Field is Required"),
+    number: Yup.number().required("This Field is Required"),
+    contact_person: Yup.string().required("This Field is Required"),
+    phone_number: Yup.number().required("This Field is Required"),
+    email: Yup.string()
+      .email("ENter a valid Email")
+      .required("This Field is Required"),
+    finance_email: Yup.string()
+      .email("ENter a valid Email")
+      .required("This Field is Required"),
+    address: Yup.string().required("This Field is Required"),
+    country: Yup.string().required("This Field is Required"),
+    finance_contact: Yup.string().required("This Field is Required"),
+    currency: Yup.string().required("This Field is Required"),
+    payment_terms: Yup.string().required("This Field is Required")
+  })
+})(NewClient);
 export default connect(
   null,
   {
     addClient
   }
-)(NewClient);
+)(CompWithFormik);

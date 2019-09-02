@@ -34,6 +34,7 @@ import Home from "./compnents/home/Home";
 
 import { verifyGreenInvoiceToken } from "./actions/authActions";
 
+import { createClient } from "./utils/toggl";
 function App() {
   // verify token
   verifyGreenInvoiceToken();

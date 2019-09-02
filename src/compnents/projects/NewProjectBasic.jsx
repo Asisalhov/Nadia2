@@ -72,7 +72,7 @@ function NewProjectBasic({
                   </option>
                   {clients &&
                     clients.map(client => (
-                      <option key={client.id} value={client.id}>
+                      <option key={client.togglID} value={client.togglID}>
                         {client.contact_person}
                       </option>
                     ))}
@@ -278,18 +278,18 @@ const CompWithFormik = withFormik({
     props.setData({ ...props.data, ...values });
     props.setStep(2);
     setSubmitting(false);
-  }
-  // validationSchema: Yup.object().shape({
-  //   project_name: Yup.string("Enter Project Name").required(
-  //     "Project Name is Required"
-  //   ),
-  //   commission_import: Yup.string().required("This Field is Required"),
-  //   commission_local: Yup.string().required("This Field is Required"),
-  //   client_id: Yup.string("Select a client").required("Client Is Required"),
-  //   owner: Yup.string("Select an Owner").required("Owner Is Required"),
-  //   currnecy: Yup.string("Select a currnecy").required("currnecy Is Required"),
-  //   business_modle: Yup.string().required("This Field is Required")
-  // })
+  },
+  validationSchema: Yup.object().shape({
+    project_name: Yup.string("Enter Project Name").required(
+      "Project Name is Required"
+    ),
+    commission_import: Yup.string().required("This Field is Required"),
+    commission_local: Yup.string().required("This Field is Required"),
+    client_id: Yup.string("Select a client").required("Client Is Required"),
+    owner: Yup.string("Select an Owner").required("Owner Is Required"),
+    currnecy: Yup.string("Select a currnecy").required("currnecy Is Required"),
+    business_modle: Yup.string().required("This Field is Required")
+  })
 })(NewProjectBasic);
 const mapStateToProps = state => ({
   clients: state.clients.clients,

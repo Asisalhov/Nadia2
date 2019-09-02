@@ -2,9 +2,13 @@ import { GET_PROJECTS, ADD_PROJECT, GET_PROJECT, EDIT_PROJECT } from "./types";
 import history from "../history";
 import {
   createProject as createAsanaProject,
-  createTasks as createAsanaTasks,
+  createTask as createAsanaTask,
   client as asana
 } from "../utils/asana";
+import {
+  createProject as createTogglProject,
+  createTask as createTogglTask
+} from "../utils/toggl";
 
 export const getProjects = () => (
   dispatch,
@@ -24,29 +28,7 @@ export const getProjects = () => (
         console.log(project.asanaData);
         return project;
       });
-      // archived: false
-      // color: null
-      // created_at: "2019-09-01T01:28:07.035Z"
-      // current_status: null
-      // custom_fields: []
-      // due_date: null
-      // due_on: null
-      // followers: [{…}]
-      // gid: "1137974439660807"
-      // id: 1137974439660807
-      // is_template: false
-      // layout: "board"
-      // members: [{…}]
-      // modified_at: "2019-09-01T01:28:13.920Z"
-      // name: "new project"
-      // notes: "comments"
-      // owner: {id: 1137029218328833, gid: "1137029218328833", name: "Mustapha lounici", resource_type: "user"}
-      // public: true
-      // resource_type: "project"
-      // section_migration_status: "completed"
-      // start_on: null
-      // workspace: {id: 1137029220879543, gid: "1137029220879543", name: "nadia", resource_type: "workspace"}
-      // __proto__: Object
+
       const projects = await Promise.all(projectsP);
       dispatch({
         type: GET_PROJECTS,
@@ -85,16 +67,10 @@ export const addProject = newProject => async (
     due_date,
     comments: notes,
     phases,
-    owner
+    owner,
+    client_id
   } = newProject;
-  console.log(due_date);
 
-  const asanaProject = await createAsanaProject({
-    name,
-    notes,
-    due_date,
-    owner
-  });
   // if attachments : upload it
   if (newProject.attachment) {
     const attachmentImage = await storageRef
@@ -103,32 +79,53 @@ export const addProject = newProject => async (
     newProject.attachment = await attachmentImage.ref.getDownloadURL();
   }
 
-  const asanaProjectID = asanaProject.gid;
-  const tasks = await createAsanaTasks({
-    projectID: asanaProjectID,
-    data: phases
+  // create asana projects
+  const asanaProject = await createAsanaProject({
+    name,
+    notes,
+    due_date,
+    owner
   });
-  const asanaTasksIds = tasks.map(task => task.gid);
+  const asanaProjectID = asanaProject.gid;
 
   // create toggl Project
+  const togglProject = await createTogglProject({ name }, client_id);
+  const togglProjectID = togglProject.id;
 
   // create nadia project
-
   const project = {
     ...newProject,
     asanaProjectID,
-    asanaTasksIds
+    togglProjectID
   };
-  return firestore
-    .collection("projects")
-    .add(project)
-    .then(snapshot => {
-      dispatch({
-        type: ADD_PROJECT,
-        payload: { id: snapshot.id, ...project }
-      });
-      history.push("/projects");
+
+  const newProjectRef = await firestore.collection("projects").add(project);
+
+  const tasksP = phases.map(async phase => {
+    console.log(phase);
+    const asanaTask = await createAsanaTask({
+      projectID: asanaProjectID,
+      data: phase
     });
+
+    const togglTask = await createTogglTask(phase, togglProjectID);
+    await firestore
+      .collection("projects")
+      .doc(newProjectRef.id)
+      .collection("phases")
+      .add({
+        asanaTaskID: asanaTask.gid,
+        togglTaskID: togglTask.id,
+        ...phase
+      });
+  });
+  await Promise.all(tasksP);
+
+  dispatch({
+    type: ADD_PROJECT,
+    payload: { id: newProjectRef.id, ...project }
+  });
+  history.push("/projects");
 };
 
 export const editProject = (id, updProject) => (
