@@ -21,7 +21,7 @@ function Header({ logout, auth }) {
       <div
         className="d-flex w-100 position-fixed justify-content-end"
         style={{
-          right: 0
+          right: "1em"
         }}
       >
         <Dropdown
