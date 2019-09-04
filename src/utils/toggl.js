@@ -4,6 +4,7 @@ var toggl = new TogglClient({ apiToken: "ad1036e708276431da51861a1cf6bd0a" });
 export const getWorkspace = () =>
   new Promise((resolve, reject) => {
     toggl.getWorkspaces((err, data) => {
+      console.log(err, data);
       if (err) console.log(err);
       resolve(data[0]);
     });
@@ -34,11 +35,13 @@ export const createProject = async ({ name }, clientID) => {
 
 export const getTogglClientProjects = async clientID => {
   const workplace = await getWorkspace();
-
+  console.log(workplace);
   return new Promise((resolve, reject) => {
     toggl.getWorkspaceProjects(workplace.id, (err, projects) => {
       if (err) reject(err);
-
+      if (!projects) {
+        projects = [];
+      }
       const clientProjects = projects.filter(
         project => project.cid === clientID
       );

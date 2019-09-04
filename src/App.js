@@ -70,7 +70,7 @@ function Panel() {
   return (
     <Container fluid className="p-0 m-0 d-flex">
       <SideMenu />
-      <div className="flex-fill ">
+      <div className="flex-fill">
         <Header />
         <div className="content_container">
           <Switch>
@@ -82,7 +82,6 @@ function Panel() {
             <Route path="/suppliers" component={Suppliers} />
             <Route path="/settings" component={Settings} />
             <Route path="/home" component={Home} />
-            {/* <Route path="/" component={UnderDev} /> */}
           </Switch>
         </div>
       </div>

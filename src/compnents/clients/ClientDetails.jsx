@@ -254,18 +254,38 @@ function ClientDetails({ client, getClient, match, editClient }) {
               <div className="m-3">
                 <h5 className="mb-2 client_project_header">Active</h5>
                 <div className="my-3">
-                  <Badge color="success" pill className="table-card-badge">
-                    Google
-                  </Badge>
+                  {client.projects
+                    .filter(p => p.active)
+                    .map(p => (
+                      <Badge
+                        style={{
+                          backgroundColor: p.hex_color
+                        }}
+                        pill
+                        className="table-card-badge"
+                      >
+                        {p.name}
+                      </Badge>
+                    ))}
                 </div>
                 <hr />
               </div>
               <div className="m-3">
                 <h5 className="mb-2 client_project_header">NON-ACTIVE</h5>
                 <div className="my-3">
-                  <Badge pill className="table-card-badge">
-                    Google
-                  </Badge>
+                  {client.projects
+                    .filter(p => !p.active)
+                    .map(p => (
+                      <Badge
+                        style={{
+                          backgroundColor: p.hex_color
+                        }}
+                        pill
+                        className="table-card-badge"
+                      >
+                        {p.name}
+                      </Badge>
+                    ))}
                 </div>
                 <hr />
               </div>

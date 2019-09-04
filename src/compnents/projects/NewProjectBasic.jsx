@@ -73,7 +73,7 @@ function NewProjectBasic({
                   {clients &&
                     clients.map(client => (
                       <option key={client.togglID} value={client.togglID}>
-                        {client.contact_person}
+                        {client.official_name}
                       </option>
                     ))}
                 </Input>
@@ -262,7 +262,7 @@ function NewProjectBasic({
 }
 const CompWithFormik = withFormik({
   mapPropsToValues: () => ({
-    project_name: "test",
+    project_name: "",
     client_id: "",
     owner: "",
     currnecy: "ILS",

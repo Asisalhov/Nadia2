@@ -17,48 +17,55 @@ function Header({ logout, auth }) {
   const [profilDropDown, setProfilDropDown] = useState(false);
 
   return (
-    <div className="header shadow-sm border-bottom d-flex justify-content-end">
-      <Dropdown
-        isOpen={newDropDown}
-        toggle={() => setNewDropDown(!newDropDown)}
+    <div className="header shadow-sm border-bottom position-relative ">
+      <div
+        className="d-flex w-100 position-fixed justify-content-end"
+        style={{
+          right: 0
+        }}
       >
-        <DropdownToggle className="mx-2 px-4 header_btn">New</DropdownToggle>
-        <DropdownMenu className="header_new_dropdown">
-          {sectionsList
-            .filter(section => section.new)
-            .map((section, i) => (
-              <DropdownItem key={i} className="header_new_dropdown_item">
-                <Link to={section.link + "/new"}>
-                  <section.Icon /> {section.text}
-                </Link>
-              </DropdownItem>
-            ))}
-        </DropdownMenu>
-      </Dropdown>
-      <div className="d-flex align-items-center border-left px-3 mx-3">
         <Dropdown
-          isOpen={profilDropDown}
-          toggle={() => setProfilDropDown(!profilDropDown)}
+          isOpen={newDropDown}
+          toggle={() => setNewDropDown(!newDropDown)}
         >
-          <DropdownToggle tag="span" className="text-capitalize">
-            {auth.displayName}
-            <span
-              style={{
-                color: "#A4AFB7",
-                paddingLeft: "0.2em"
-              }}
-            >
-              <DownIcon />
-            </span>
-          </DropdownToggle>
-          <DropdownMenu>
-            <DropdownItem onClick={logout}>SignOut</DropdownItem>
+          <DropdownToggle className="mx-2 px-4 header_btn">New</DropdownToggle>
+          <DropdownMenu className="header_new_dropdown">
+            {sectionsList
+              .filter(section => section.new)
+              .map((section, i) => (
+                <DropdownItem key={i} className="header_new_dropdown_item">
+                  <Link to={section.link + "/new"}>
+                    <section.Icon /> {section.text}
+                  </Link>
+                </DropdownItem>
+              ))}
           </DropdownMenu>
         </Dropdown>
+        <div className="d-flex align-items-center border-left px-3 mx-3">
+          <Dropdown
+            isOpen={profilDropDown}
+            toggle={() => setProfilDropDown(!profilDropDown)}
+          >
+            <DropdownToggle tag="span" className="text-capitalize">
+              {auth.displayName}
+              <span
+                style={{
+                  color: "#A4AFB7",
+                  paddingLeft: "0.2em"
+                }}
+              >
+                <DownIcon />
+              </span>
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem onClick={logout}>SignOut</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+        <h2 className="d-flex align-items-center">
+          <ProfilIcon />
+        </h2>
       </div>
-      <h2 className="d-flex align-items-center">
-        <ProfilIcon />
-      </h2>
     </div>
   );
 }

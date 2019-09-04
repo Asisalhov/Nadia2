@@ -36,10 +36,13 @@ export const getClient = id => (
     .collection("clients")
     .doc(id)
     .get()
-    .then(doc => {
+    .then(async doc => {
+      const client = { id: doc.id, ...doc.data() };
+      client.projects = await getTogglClientProjects(client.togglID);
+
       dispatch({
         type: GET_CLIENT,
-        payload: { id: doc.id, ...doc.data() }
+        payload: client
       });
     });
 };
