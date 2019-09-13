@@ -201,11 +201,11 @@ a.btn-circle {
   padding: 1.3em 0.75em;
   white-space: nowrap;
 }
-.table_card_table td {
+.table_card_table > td {
   vertical-align: middle;
 }
 
-.table_card tr:nth-of-type(even),
+.table_card > tr:nth-of-type(even),
 .table_card thead,
 .table_header {
   background-color: #f5f6fa;
@@ -330,4 +330,9 @@ a.btn-circle {
 .form-group {
   margin-bottom: 1em;
   padding: 0.5rem 2rem;
+}
+
+.table-no-hover tbody tr:hover {
+  color: inherit;
+  background-color: inherit;
 }

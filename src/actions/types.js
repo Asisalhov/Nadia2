@@ -15,4 +15,7 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 export const LOGOUT = "LOGOUT";
 export const REGISTER_ERROR = "REGISTER_ERROR";
 export const RECOVER_EMAIL_SENT = "RECOVER_EMAIL_SENT";
-export const RECOVER_EMAIL_ERROR = "RECOVER_EMAIL_SENT";
+export const RECOVER_EMAIL_ERROR = "RECOVER_EMAIL_ERROR";
+
+export const GET_PRESETS = "GET_PRESETS";
+export const GET_ALERTS = "GET_ALERTS";

@@ -64,6 +64,14 @@ export const createTask = async ({ name, uid, hours }, projectID) => {
     );
   });
 };
+export const getProjectTasks = async projectID => {
+  return new Promise((resolve, reject) => {
+    toggl.getProjectTasks(projectID, (err, tasks) => {
+      if (err) reject(err);
+      resolve(tasks);
+    });
+  });
+};
 
 // export const createTasks = async ({ projectID, data }) => {
 //   console.log({ projectID, data });

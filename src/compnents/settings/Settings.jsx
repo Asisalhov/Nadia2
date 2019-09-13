@@ -7,7 +7,7 @@ function Settings() {
     <div>
       <h3>Settings</h3>
       <TableCard>
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-around">
           <SettingsCrad text="Team" link="/settings/team" color="#A3A0FB" />
           <SettingsCrad
             text="Presets"
@@ -15,8 +15,6 @@ function Settings() {
             color="#EFDC2D"
           />
           <SettingsCrad text="Alerts" link="/settings/alerts" color="#FF6565" />
-          <SettingsCrad text="TBD" link="/settings/" color="#17BBC8" />
-          <SettingsCrad text="TBD" link="/settings/" color="#4AD991" />
         </div>
       </TableCard>
     </div>

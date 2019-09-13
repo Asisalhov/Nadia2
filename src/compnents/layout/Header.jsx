@@ -17,11 +17,12 @@ function Header({ logout, auth }) {
   const [profilDropDown, setProfilDropDown] = useState(false);
 
   return (
-    <div className="header shadow-sm border-bottom position-relative ">
+    <div className="header shadow-sm border-bottom ">
       <div
-        className="d-flex w-100 position-fixed justify-content-end"
+        className="d-flex w-100 position-absolute justify-content-end"
         style={{
-          right: "1em"
+          right: "1em",
+          top: "1em"
         }}
       >
         <Dropdown

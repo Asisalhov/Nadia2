@@ -7,7 +7,8 @@ import {
 } from "../utils/asana";
 import {
   createProject as createTogglProject,
-  createTask as createTogglTask
+  createTask as createTogglTask,
+  getProjectTasks as getTogglProjectTasks
 } from "../utils/toggl";
 
 export const getProjects = () => (
@@ -46,10 +47,13 @@ export const getProject = id => (
     .collection("projects")
     .doc(id)
     .get()
-    .then(doc => {
+    .then(async doc => {
+      let project = { id: doc.id, ...doc.data() };
+      const tasks = await getTogglProjectTasks(project.togglProjectID);
+      project.tasks = tasks || [];
       dispatch({
         type: GET_PROJECT,
-        payload: { id: doc.id, ...doc.data() }
+        payload: project
       });
     });
 };
@@ -102,7 +106,6 @@ export const addProject = newProject => async (
   const newProjectRef = await firestore.collection("projects").add(project);
 
   const tasksP = phases.map(async phase => {
-    console.log(phase);
     const asanaTask = await createAsanaTask({
       projectID: asanaProjectID,
       data: phase
