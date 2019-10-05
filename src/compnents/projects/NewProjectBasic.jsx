@@ -25,7 +25,8 @@ function NewProjectBasic({
   errors,
   touched,
   values,
-  handleChange
+  handleChange,
+  isSubmitting
 }) {
   const [fileName, setFileName] = useState(null);
 
@@ -98,9 +99,7 @@ function NewProjectBasic({
                   </option>
                   {users &&
                     users.map(user => (
-                      <option value={user.email}>
-                        {user.firstName} {user.lastName}
-                      </option>
+                      <option value={user.email}>{user.name}</option>
                     ))}
                 </Input>
                 <FormFeedback>{errors.owner}</FormFeedback>
@@ -251,6 +250,7 @@ function NewProjectBasic({
                 width: "70px"
               }}
               className="table-card-button "
+              disabled={isSubmitting}
             >
               Save
             </Button>
@@ -274,8 +274,13 @@ const CompWithFormik = withFormik({
     material_subcon_billing: true
   }),
   handleSubmit: (values, { props, setSubmitting }) => {
+    setSubmitting(true);
     props.setBuissModle(values.business_modle);
-    props.setData({ ...props.data, ...values });
+    props.setData({
+      ...props.data,
+      ...values,
+      owner: props.users.find(user => user.email === values.owner)
+    });
     props.setStep(2);
     setSubmitting(false);
   },
@@ -293,6 +298,6 @@ const CompWithFormik = withFormik({
 })(NewProjectBasic);
 const mapStateToProps = state => ({
   clients: state.clients.clients,
-  users: state.users.users
+  users: state.users.team
 });
 export default connect(mapStateToProps)(CompWithFormik);

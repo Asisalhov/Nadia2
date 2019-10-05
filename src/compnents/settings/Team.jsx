@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import history from "../../history";
 import { connect } from "react-redux";
-import { getClients } from "../../actions/clientsActions";
+import { getTeamMembers } from "../../actions/usersActions";
 import { Table, Button, Badge, CustomInput } from "reactstrap";
 
 import TableCard from "../layout/TableCard";
@@ -10,8 +10,17 @@ import CardSearch from "../layout/CardSearch";
 import CardPagination from "../layout/CardPagination";
 import Spinner from "../layout/Spinner";
 
-function Team() {
+function Team({ getTeamMembers, team }) {
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      await getTeamMembers();
+      setLoading(false);
+    };
+    getData();
+  }, [getTeamMembers]);
   return (
     <div>
       <h3>Settings - team</h3>
@@ -47,17 +56,17 @@ function Team() {
 
           {!loading ? (
             <tbody>
-              {[1, 2, 3, 4, 5, 6].map(
+              {team.map(
                 ({
-                  id = 1,
-                  name = "Boaz Zemer",
-                  email = "boaz@prime-do.com",
-                  role = "Design Lead",
-                  team = "Team Boaz",
-                  departement = "Design",
-                  toggl = true,
-                  asana = false,
-                  greeInVoice = true
+                  id,
+                  name,
+                  email,
+                  role,
+                  team,
+                  departement,
+                  toggl,
+                  asana,
+                  greeInVoice
                 }) => (
                   <tr
                     key={id}
@@ -98,5 +107,10 @@ function Team() {
     </div>
   );
 }
-
-export default Team;
+const mapStateToProps = state => ({
+  team: state.users.team
+});
+export default connect(
+  mapStateToProps,
+  { getTeamMembers }
+)(Team);

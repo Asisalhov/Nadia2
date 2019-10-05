@@ -13,7 +13,14 @@ import { ReactComponent as Done } from "../../Icons/done.svg";
 import { ReactComponent as Edit } from "../../Icons/edit.svg";
 import { ReactComponent as Close } from "../../Icons/close.svg";
 
-function NewClient({ addClient, values, touched, errors, handleChange }) {
+function NewClient({
+  addClient,
+  values,
+  touched,
+  errors,
+  handleChange,
+  isSubmitting
+}) {
   const [loading, setLoading] = useState(false);
 
   return (
@@ -46,7 +53,7 @@ function NewClient({ addClient, values, touched, errors, handleChange }) {
               </Link>
             </div>
           </div>
-          <fieldset disabled={loading}>
+          <fieldset disabled={loading || isSubmitting}>
             <Table borderless className="table_card_table">
               <thead>
                 <tr>
@@ -231,6 +238,7 @@ const CompWithFormik = withFormik({
     payment_terms: "CASH"
   }),
   handleSubmit: (values, { props, setSubmitting }) => {
+    setSubmitting(true);
     props.addClient(values);
   },
   validationSchema: Yup.object().shape({

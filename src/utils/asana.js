@@ -30,8 +30,14 @@ export const getProjects = async () => {
   return projectsRes.data;
 };
 
+export const getProject = async id => {
+  // const res = await client.workspaces.findAll();
+  // const workplace = res.data[0];
+  const projectsRes = await client.projects.findById(id);
+  return projectsRes;
+};
 export const createProject = async data => {
-  const { name, notes, due_date, owner } = data;
+  const { name, notes, due_on, owner } = data;
   const res = await client.workspaces.findAll();
   const workplace = res.data[0];
 
@@ -39,11 +45,11 @@ export const createProject = async data => {
     name,
     notes,
     color: "light-green",
-    current_status: { color: "green", text: "new" }
-    // owner
+    current_status: { color: "green", text: "active" },
+    due_on
   });
-  // await client.projects.addMembers(projectsRes.gid, [owner]);
-  console.log({ projectsRes });
+  if (owner.asanaID)
+    await client.projects.addMembers(projectsRes.gid, [owner.asanaID]);
   return projectsRes;
 };
 
@@ -79,4 +85,14 @@ export const createTask = async ({ projectID, data }) => {
 
   await client.tasks.addProject(task.gid, { project: projectID });
   return task;
+};
+
+export const verifyUser = async email => {
+  const resworkspace = await client.workspaces.findAll();
+  const workplace = resworkspace.data[0];
+
+  const user = await client.users.findById(email);
+
+  console.log(user);
+  return user;
 };

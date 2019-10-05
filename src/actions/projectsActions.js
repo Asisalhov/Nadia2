@@ -8,7 +8,9 @@ import {
 import {
   createProject as createTogglProject,
   createTask as createTogglTask,
-  getProjectTasks as getTogglProjectTasks
+  getProjectTasks as getTogglProjectTasks,
+  toggl,
+  getProjectDetails as getTogglProjectDetails
 } from "../utils/toggl";
 
 export const getProjects = () => (
@@ -26,7 +28,7 @@ export const getProjects = () => (
         project.asanaData = await asana.projects.findById(
           project.asanaProjectID
         );
-        console.log(project.asanaData);
+
         return project;
       });
 
@@ -49,7 +51,15 @@ export const getProject = id => (
     .get()
     .then(async doc => {
       let project = { id: doc.id, ...doc.data() };
-      const tasks = await getTogglProjectTasks(project.togglProjectID);
+      const phasesDoc = await doc.ref.collection("phases").get();
+      console.log(phasesDoc);
+      const phasesP = phasesDoc.docs.map(async phaseDoc => {
+        const phase = phaseDoc.data();
+        const res = await getTogglProjectDetails(phase.togglTaskID);
+        console.log({ toggl: res, ...phase });
+        return { toggl: res, ...phase };
+      });
+      const tasks = await Promise.all(phasesP);
       project.tasks = tasks || [];
       dispatch({
         type: GET_PROJECT,
@@ -66,6 +76,7 @@ export const addProject = newProject => async (
   const firestore = getFirestore();
   const firebase = getFirebase();
   const storageRef = firebase.storage().ref("/attachments");
+
   const {
     project_name: name,
     due_date,
@@ -87,20 +98,19 @@ export const addProject = newProject => async (
   const asanaProject = await createAsanaProject({
     name,
     notes,
-    due_date,
+    due_on: due_date,
     owner
   });
   const asanaProjectID = asanaProject.gid;
 
-  // create toggl Project
-  const togglProject = await createTogglProject({ name }, client_id);
-  const togglProjectID = togglProject.id;
+  // // create toggl Project
+  // const togglProject = await createTogglProject({ name }, client_id);
+  // const togglProjectID = togglProject.id;
 
   // create nadia project
   const project = {
     ...newProject,
-    asanaProjectID,
-    togglProjectID
+    asanaProjectID
   };
 
   const newProjectRef = await firestore.collection("projects").add(project);
@@ -111,7 +121,7 @@ export const addProject = newProject => async (
       data: phase
     });
 
-    const togglTask = await createTogglTask(phase, togglProjectID);
+    const togglTask = await createTogglProject(phase, name, client_id);
     await firestore
       .collection("projects")
       .doc(newProjectRef.id)

@@ -2,11 +2,11 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-function PublicRoute({ component: Component, auth }) {
-  return !auth.uid ? <Component /> : <Redirect to="/home" />;
+function PublicRoute({ component: Component, user }) {
+  return !user ? <Component /> : <Redirect to="/home" />;
 }
 
 const mapStateToProps = state => ({
-  auth: state.firebase.auth
+  user: state.auth.user
 });
 export default connect(mapStateToProps)(PublicRoute);

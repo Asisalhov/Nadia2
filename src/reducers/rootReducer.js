@@ -6,6 +6,8 @@ import { firebaseReducer } from "react-redux-firebase";
 import projectsReducer from "./projectsReducer";
 import usersReducer from "./usersReducer";
 import settingsReducer from "./settingsReducer";
+import suppliersReducer from "./suppliersReducer";
+import expensesReducer from "./expensesReducer";
 export default combineReducers({
   auth: authReducer,
   clients: clientsReducer,
@@ -13,5 +15,7 @@ export default combineReducers({
   users: usersReducer,
   settings: settingsReducer,
   // firestore: firestoreReducer, // for realtime data
-  firebase: firebaseReducer
+  firebase: firebaseReducer,
+  suppliers: suppliersReducer,
+  expenses: expensesReducer
 });

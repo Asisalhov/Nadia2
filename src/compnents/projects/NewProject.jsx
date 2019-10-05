@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { connect } from "react-redux";
 import { addProject } from "../../actions/projectsActions";
-import { getUsers } from "../../actions/usersActions";
+import { getTeamMembers } from "../../actions/usersActions";
 import { getClients } from "../../actions/clientsActions";
 
 import NewProjectBasic from "./NewProjectBasic";
@@ -10,19 +10,19 @@ import NewProjectFixed from "./NewProjectFixed";
 import NewProjectRetainer from "./NewProjectRetainer";
 import NewProjectTM from "./NewProjectTM";
 
-function NewProject({ addProject, getUsers, getClients }) {
+function NewProject({ addProject, getTeamMembers, getClients }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
-      await getUsers();
+      await getTeamMembers();
       await getClients();
       setLoading(false);
     };
 
     getData();
-  }, [getClients, getUsers]);
+  }, [getClients, getTeamMembers]);
 
   // this is a steped form , we will have 2 steps
   const [step, setStep] = useState(1);
@@ -75,5 +75,5 @@ function NewProject({ addProject, getUsers, getClients }) {
 
 export default connect(
   null,
-  { addProject, getUsers, getClients }
+  { addProject, getTeamMembers, getClients }
 )(NewProject);

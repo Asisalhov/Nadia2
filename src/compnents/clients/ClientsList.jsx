@@ -60,11 +60,11 @@ function ClientsList({ clients, getClients }) {
                     <td>{contact_person}</td>
                     <td className="text-center">
                       {projects
-                        .filter(p => p.active)
+                        .filter(p => !p.archived)
                         .map(p => (
                           <Badge
                             style={{
-                              backgroundColor: p.hex_color
+                              backgroundColor: "#4AD991"
                             }}
                             pill
                             className="table-card-badge"

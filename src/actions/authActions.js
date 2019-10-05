@@ -5,29 +5,66 @@ import {
   LOGOUT,
   REGISTER_ERROR,
   RECOVER_EMAIL_SENT,
-  RECOVER_EMAIL_ERROR
+  RECOVER_EMAIL_ERROR,
+  GET_GREENINVOICE_TOKEN
 } from "./types";
-import { getToken as getGreenInvoiceToken } from "../utils/greenInvoice";
+import { verifyUser as verifyTogglUser } from "../utils/toggl";
+import { verifyUser as verifyAssanaUser } from "../utils/asana";
 
 export const googleLogin = () => async dispatch => {
   const res = await signInWithGoogle();
-  await verifyGreenInvoiceToken();
-  // save to firebase
 
-  const doc = await db
-    .collection("users")
-    .doc(res.user.uid)
+  const teamRes = await db
+    .collection("team")
+    .where("email", "==", res.user.email.toLowerCase())
     .get();
-  if (!doc.exists) {
-    await db
-      .collection("users")
-      .doc(res.user.uid)
-      .set({
-        firstName: res.additionalUserInfo.profile.given_name,
-        lastName: res.additionalUserInfo.profile.family_name,
-        email: res.additionalUserInfo.profile.email
+
+  if (teamRes.empty) {
+    await auth.signOut();
+    return dispatch({
+      type: LOGIN_ERROR,
+      payload: {
+        message: "User does Not Exist"
+      }
+    });
+  } else {
+    const teamMember = { id: teamRes.docs[0].id, ...teamRes.docs[0].data() };
+    const toggl = await verifyTogglUser(teamMember.email);
+    if (!toggl) {
+      await auth.signOut();
+      return dispatch({
+        type: LOGIN_ERROR,
+        payload: {
+          message: "User is not in Toggl Team , please contact your admin"
+        }
       });
+    } else {
+      await db
+        .collection("team")
+        .doc(teamMember.id)
+        .update({
+          togglID: toggl.id
+        });
+    }
+    const asana = await verifyAssanaUser(teamMember.email);
+    if (!asana) {
+      await auth.signOut();
+      return dispatch({
+        type: LOGIN_ERROR,
+        payload: {
+          message: "User is not in Asana Team , please contact your admin"
+        }
+      });
+    } else {
+      await db
+        .collection("team")
+        .doc(teamMember.id)
+        .update({
+          asanaID: asana.gid
+        });
+    }
   }
+
   dispatch({
     type: LOGIN_SUCCESS,
     payload: {
@@ -39,7 +76,6 @@ export const googleLogin = () => async dispatch => {
 };
 
 export const login = ({ email, password }) => async dispatch => {
-  await verifyGreenInvoiceToken();
   auth
     .signInWithEmailAndPassword(email, password)
     .then(user => {
@@ -62,7 +98,6 @@ export const register = ({ firstName, lastName, email, password }) => async (
 ) => {
   try {
     const res = await auth.createUserWithEmailAndPassword(email, password);
-    await verifyGreenInvoiceToken();
     // save to firebase
 
     await res.user.updateProfile({ displayName: `${firstName} ${lastName}` });
@@ -117,22 +152,15 @@ export const sendRecoverCode = email => dispatch => {
     );
 };
 
-export const verifyGreenInvoiceToken = async () => {
-  const greenInvoice = JSON.parse(localStorage.getItem("greenInvoice"));
-  if (greenInvoice) {
-    const { token, expires } = greenInvoice;
+export const verifyUser = user => async dispatch => {
+  if (user) {
+    // const asana = await verifyAssanaUser(user.email);
+    // const toggl = await verifyTogglUser(user.email);
 
-    const currentTime = Date.now() / 1000;
-    if (expires < currentTime) {
-      const { token, expires } = await getGreenInvoiceToken();
-      saveGreenInvoiceToken({ token, expires });
-    }
-  } else {
-    const { token, expires } = await getGreenInvoiceToken();
-    saveGreenInvoiceToken({ token, expires });
+    // if (asana && toggl)
+    dispatch({
+      type: LOGIN_SUCCESS,
+      payload: user
+    });
   }
-};
-
-const saveGreenInvoiceToken = ({ token, expires }) => {
-  localStorage.setItem("greenInvoice", JSON.stringify({ token, expires }));
 };

@@ -255,11 +255,11 @@ function ClientDetails({ client, getClient, match, editClient }) {
                 <h5 className="mb-2 client_project_header">Active</h5>
                 <div className="my-3">
                   {client.projects
-                    .filter(p => p.active)
+                    .filter(p => !p.archived)
                     .map(p => (
                       <Badge
                         style={{
-                          backgroundColor: p.hex_color
+                          backgroundColor: "#4AD991"
                         }}
                         pill
                         className="table-card-badge"
@@ -274,11 +274,11 @@ function ClientDetails({ client, getClient, match, editClient }) {
                 <h5 className="mb-2 client_project_header">NON-ACTIVE</h5>
                 <div className="my-3">
                   {client.projects
-                    .filter(p => !p.active)
+                    .filter(p => p.archived)
                     .map(p => (
                       <Badge
                         style={{
-                          backgroundColor: p.hex_color
+                          backgroundColor: "#FF6565"
                         }}
                         pill
                         className="table-card-badge"

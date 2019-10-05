@@ -1,7 +1,8 @@
-import { GET_USERS } from "../actions/types";
+import { GET_USERS, GET_TEAM_MEMBERS, ADD_TEAM_MEMBER } from "../actions/types";
 
 const initialState = {
-  users: []
+  users: [],
+  team: []
 };
 export default function(state = initialState, action) {
   switch (action.type) {
@@ -9,6 +10,16 @@ export default function(state = initialState, action) {
       return {
         ...state,
         users: action.payload
+      };
+    case ADD_TEAM_MEMBER:
+      return {
+        ...state,
+        team: [action.payload, ...state.team]
+      };
+    case GET_TEAM_MEMBERS:
+      return {
+        ...state,
+        team: action.payload
       };
 
     default:

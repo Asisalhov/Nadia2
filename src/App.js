@@ -1,11 +1,12 @@
 import React from "react";
+import { connect } from "react-redux";
+
 // router
 import { Router, Switch, Route } from "react-router-dom";
 import history from "./history";
-
+import { auth } from "./config/firebase";
 // redux
-import store from "./store";
-import { Provider } from "react-redux";
+
 // style
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -32,37 +33,35 @@ import PrivateRoute from "./compnents/auth/PrivateRoute";
 import PublicRoute from "./compnents/auth/PublicRoute";
 import Home from "./compnents/home/Home";
 
-import { verifyGreenInvoiceToken } from "./actions/authActions";
+import { verifyUser } from "./actions/authActions";
 
-import { createClient } from "./utils/toggl";
-function App() {
-  // verify token
-  verifyGreenInvoiceToken();
+function App({ verifyUser }) {
+  auth.onAuthStateChanged(user => {
+    verifyUser(user);
+  });
   return (
-    <Provider store={store}>
-      <Router history={history}>
-        <Switch>
-          {/* public routes */}
-          <Route
-            path="/signin"
-            exact
-            render={() => <PublicRoute component={SignIn} />}
-          />
-          <Route
-            path="/SignUp"
-            exact
-            render={() => <PublicRoute component={SignUp} />}
-          />
-          <Route
-            path="/Recover"
-            exact
-            render={() => <PublicRoute component={Recover} />}
-          />
-          {/* private routes */}
-          <Route render={() => <PrivateRoute component={Panel} />} />
-        </Switch>
-      </Router>
-    </Provider>
+    <Router history={history}>
+      <Switch>
+        {/* public routes */}
+        <Route
+          path="/signin"
+          exact
+          render={() => <PublicRoute component={SignIn} />}
+        />
+        <Route
+          path="/SignUp"
+          exact
+          render={() => <PublicRoute component={SignUp} />}
+        />
+        <Route
+          path="/Recover"
+          exact
+          render={() => <PublicRoute component={Recover} />}
+        />
+        {/* private routes */}
+        <Route render={() => <PrivateRoute component={Panel} />} />
+      </Switch>
+    </Router>
   );
 }
 
@@ -89,4 +88,7 @@ function Panel() {
   );
 }
 
-export default App;
+export default connect(
+  null,
+  { verifyUser }
+)(App);

@@ -1,21 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import history from "../../history";
 import { connect } from "react-redux";
 import { Table, Button, Badge } from "reactstrap";
-
+import { getExpenses } from "../../actions/expensesActions";
 import TableCard from "../layout/TableCard";
 import CardSearch from "../layout/CardSearch";
 import CardPagination from "../layout/CardPagination";
 import Spinner from "../layout/Spinner";
 import { ReactComponent as AttachmentIcon } from "../../Icons/attachment.svg";
 
-function ExpensesList() {
+function ExpensesList({ getExpenses, expenses }) {
   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      await getExpenses();
+      setLoading(false);
+    };
+    getData();
+  }, [getExpenses]);
 
   const redirectToExpenseDetails = id => history.push(`/expenses/${id}`);
 
-  const expenses = [];
   return (
     <div>
       <h3>Expenses</h3>
@@ -43,7 +50,7 @@ function ExpensesList() {
                 <th>owner</th>
                 <th>payment status</th>
                 <th>charge client</th>
-                <th>cost</th>
+                <th colSpan="2">cost</th>
                 <th>cost for client</th>
                 <th>type</th>
                 <th>invoice date</th>
@@ -57,24 +64,27 @@ function ExpensesList() {
 
             {!loading ? (
               <tbody>
-                {[1, 2, 3, 4, 5].map(
+                {expenses.map(
                   ({
                     id,
-                    handling_date = "DD/MM/YYYY",
-                    supplier_name = "Jhon",
-                    client_name = "google",
-                    details = "test tes test",
-                    owner_name = "Boaz Zemer",
-                    payment_status = "",
-                    charge_client = true,
-                    cost = "50 NIS",
-                    cost_client = "70 NIS",
-                    type = "type1",
-                    invoice_date = "DD/MM/YYYY",
-                    payment_terms = "NET+30",
-                    performa_invoice = "123456789",
-                    tax_invoice = "1234567",
-                    internal_PO = "123456789"
+                    handling_date,
+                    supplier_name,
+                    client_name,
+                    details,
+                    owner_name,
+                    project_name,
+                    payment_status,
+                    charge_client,
+                    cost,
+                    cost_client,
+                    type,
+                    invoice_date,
+                    payment_terms,
+                    performa_invoice,
+                    tax_invoice,
+                    internal_po,
+                    attachment,
+                    currency
                   }) => (
                     <tr
                       key={id}
@@ -86,6 +96,7 @@ function ExpensesList() {
                       <td>{handling_date}</td>
                       <td>{supplier_name}</td>
                       <td>{client_name}</td>
+                      <td>{project_name}</td>
                       <td>{details}</td>
                       <td>{owner_name}</td>
                       <td>
@@ -101,17 +112,31 @@ function ExpensesList() {
                         </Button>
                       </td>
                       <td>{charge_client ? "YES" : "NO"}</td>
-                      <td>{cost}</td>
-                      <td>{cost_client}</td>
+                      <td colSpan="2">
+                        {cost} {currency}
+                      </td>
+                      <td>
+                        {cost_client} {currency}
+                      </td>
                       <td>{type}</td>
                       <td>{invoice_date}</td>
                       <td>{payment_terms}</td>
                       <td>{performa_invoice}</td>
                       <td>{tax_invoice}</td>
-                      <td>{internal_PO}</td>
-                      <td>{payment_terms}</td>
+                      <td>{internal_po}</td>
                       <td>
-                        <AttachmentIcon />
+                        <a
+                          href={attachment}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          disabled={!attachment}
+                          style={{
+                            color: `${attachment ? "#A3A6B4" : "#E9E9F0"}`,
+                            fontSize: "1.5em"
+                          }}
+                        >
+                          <AttachmentIcon />
+                        </a>
                       </td>
                     </tr>
                   )
@@ -129,5 +154,10 @@ function ExpensesList() {
     </div>
   );
 }
-
-export default ExpensesList;
+const mapStateToProps = state => ({
+  expenses: state.expenses.expenses
+});
+export default connect(
+  mapStateToProps,
+  { getExpenses }
+)(ExpensesList);

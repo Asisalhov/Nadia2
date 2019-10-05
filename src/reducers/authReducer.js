@@ -4,14 +4,16 @@ import {
   LOGOUT,
   REGISTER_ERROR,
   RECOVER_EMAIL_SENT,
-  RECOVER_EMAIL_ERROR
+  RECOVER_EMAIL_ERROR,
+  GET_GREENINVOICE_TOKEN
 } from "../actions/types";
 
 const initialState = {
   user: null,
   loginError: null,
   registerError: null,
-  recoverMsg: null
+  recoverMsg: null,
+  greenInvoiceToken: null
 };
 export default function(state = initialState, action) {
   switch (action.type) {
@@ -20,7 +22,8 @@ export default function(state = initialState, action) {
     case LOGIN_ERROR:
       return {
         ...state,
-        loginError: action.payload
+        loginError: action.payload,
+        user: null
       };
     case LOGOUT:
       return {
@@ -41,6 +44,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         registerError: action.payload
+      };
+    case GET_GREENINVOICE_TOKEN:
+      return {
+        ...state,
+        greenInvoiceToken: action.payload
       };
     default:
       return state;

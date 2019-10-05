@@ -19,7 +19,7 @@ import {
 } from "reactstrap";
 import Phases from "./Phases";
 
-function NewProjectTM({ values, handleSubmit, errors, touched }) {
+function NewProjectTM({ values, handleSubmit, errors, touched, isSubmitting }) {
   const [phases, setPhases] = useState([
     { id: "1", number: "1", name: "", owner: "", hours: "", due_Date: "" }
   ]);
@@ -200,6 +200,7 @@ function NewProjectTM({ values, handleSubmit, errors, touched }) {
                     height: "35px"
                   }}
                   className="table-card-button "
+                  disabled={isSubmitting}
                 >
                   Save
                 </Button>
@@ -225,6 +226,7 @@ const CompWithFormik = withFormik({
     down_payment_fee: ""
   }),
   handleSubmit: (values, { props, setSubmitting }) => {
+    setSubmitting(true);
     values.phases = values.phases.filter(phase => phase.name && phase.due_Date);
     props.setData({ ...props.data, ...values });
     props.createProject({ ...props.data, ...values });

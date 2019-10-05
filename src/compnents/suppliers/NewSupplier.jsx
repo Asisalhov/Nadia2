@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 
 import { Link } from "react-router-dom";
-
 import { connect } from "react-redux";
-import { addClient } from "../../actions/clientsActions";
-import TableCard from "../layout/TableCard";
+import { addSupplier } from "../../actions/suppliersActions";
+
+import { withFormik, Field, Form } from "formik";
+import * as Yup from "yup";
+
 // reactstrap
 import { Table, Input, CustomInput, Button } from "reactstrap";
 // icons
@@ -12,57 +14,15 @@ import { ReactComponent as Done } from "../../Icons/done.svg";
 import { ReactComponent as Edit } from "../../Icons/edit.svg";
 import { ReactComponent as Close } from "../../Icons/close.svg";
 
-function NewSupplier() {
+import TableCard from "../layout/TableCard";
+
+function NewSupplier({ handleChange, values, isSubmitting, addSupplier }) {
   const [loading, setLoading] = useState(false);
-  const [newClient, setNewClient] = useState({
-    official_name: "",
-    number: "",
-    contact_person: "",
-    phone_number: "",
-    email: "",
-    address: "",
-    country: "",
-    finance_contact: "",
-    finance_email: "",
-    currency: "",
-    payment_terms: "",
-    send_invoice_auto: false
-  });
 
-  const onInputChange = e =>
-    setNewClient({
-      ...newClient,
-      [e.target.name]: e.target.value
-    });
-  const onCheckboxChange = e =>
-    setNewClient({
-      ...newClient,
-      [e.target.id]: e.target.checked
-    });
-
-  const onSubmit = e => {
-    e.preventDefault();
-    setLoading(true);
-    addClient(newClient);
-  };
-  const {
-    official_name,
-    number,
-    contact_person,
-    phone_number,
-    email,
-    address,
-    country,
-    finance_contact,
-    finance_email,
-    currency,
-    payment_terms,
-    send_invoice_auto
-  } = newClient;
   return (
     <div>
       <h3>New client</h3>
-      <form onSubmit={onSubmit}>
+      <Form>
         <TableCard>
           <div className="d-flex justify-content-between table_card_header">
             <div className="d-flex">
@@ -89,7 +49,7 @@ function NewSupplier() {
               </Link>
             </div>
           </div>
-          <fieldset disabled={loading}>
+          <fieldset disabled={loading || isSubmitting}>
             <Table borderless className="table_card_table">
               <thead>
                 <tr>
@@ -105,61 +65,25 @@ function NewSupplier() {
               <tbody>
                 <tr>
                   <td width="13%">
-                    <Input
-                      onChange={onInputChange}
-                      name="official_name"
-                      value={official_name}
-                      required
-                    />
+                    <Input tag={Field} name="official_name" />
                   </td>
                   <td width="10%">
-                    <Input
-                      onChange={onInputChange}
-                      name="number"
-                      value={number}
-                      required
-                    />
+                    <Input tag={Field} name="number" />
                   </td>
                   <td width="15%">
-                    <Input
-                      onChange={onInputChange}
-                      name="contact_person"
-                      value={contact_person}
-                      required
-                    />
+                    <Input tag={Field} name="contact_person" />
                   </td>
                   <td width="14%">
-                    <Input
-                      onChange={onInputChange}
-                      name="phone_number"
-                      value={phone_number}
-                      required
-                    />
+                    <Input tag={Field} name="phone_number" />
                   </td>
                   <td width="13%">
-                    <Input
-                      onChange={onInputChange}
-                      name="email"
-                      type="email"
-                      value={email}
-                      required
-                    />
+                    <Input tag={Field} name="email" type="email" />
                   </td>
                   <td width="26%">
-                    <Input
-                      onChange={onInputChange}
-                      name="address"
-                      value={address}
-                      required
-                    />
+                    <Input tag={Field} name="address" />
                   </td>
                   <td width="8%">
-                    <Input
-                      onChange={onInputChange}
-                      name="country"
-                      value={country}
-                      required
-                    />
+                    <Input tag={Field} name="country" />
                   </td>
                 </tr>
               </tbody>
@@ -180,38 +104,26 @@ function NewSupplier() {
               <tbody>
                 <tr>
                   <td width="13%">
-                    <Input
-                      onChange={onInputChange}
-                      name="finance_contact"
-                      value={finance_contact}
-                      required
-                    />
+                    <Input tag={Field} name="finance_contact" />
                   </td>
                   <td colSpan="2">
                     <Input
-                      onChange={onInputChange}
+                      tag={Field}
                       name="finance_email"
                       type="email"
-                      value={finance_email}
                       className="w-75"
-                      required
                     />
                   </td>
                   <td width="15%">
-                    <Input
-                      onChange={onInputChange}
-                      name="currency"
-                      value={currency}
-                      required
-                    />
+                    <Input tag={Field} name="currency" />
                   </td>
                   <td width="13%">
                     <Input
-                      onChange={onInputChange}
+                      tag={Field}
+                      component="select"
                       type="select"
                       name="payment_terms"
-                      value={payment_terms}
-                      required
+                      onChange={handleChange}
                     >
                       <option value="CASH">CASH</option>
                       <option value="EOM + 30">EOM + 30</option>
@@ -228,9 +140,34 @@ function NewSupplier() {
             </Table>
           </fieldset>
         </TableCard>
-      </form>
+      </Form>
     </div>
   );
 }
 
-export default NewSupplier;
+const CompWithFormik = withFormik({
+  mapPropsToValues: () => ({
+    official_name: "",
+    number: "",
+    contact_person: "",
+    phone_number: "",
+    email: "",
+    address: "",
+    country: "",
+    finance_contact: "",
+    finance_email: "",
+    currency: "",
+    payment_terms: ""
+  }),
+  handleSubmit: (values, { props: { addSupplier }, setSubmitting }) => {
+    setSubmitting(true);
+    // console.log(values);
+    addSupplier(values);
+  },
+  validationSchema: Yup.object().shape({})
+})(NewSupplier);
+const mapStateToProps = state => ({});
+export default connect(
+  mapStateToProps,
+  { addSupplier }
+)(CompWithFormik);

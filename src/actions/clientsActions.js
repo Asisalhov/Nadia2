@@ -4,6 +4,7 @@ import {
   createClient as createTogglClient,
   getTogglClientProjects
 } from "../utils/toggl";
+import { getProject as getAsanaProject } from "../utils/asana";
 export const getClients = () => (
   dispatch,
   getState,
@@ -16,7 +17,22 @@ export const getClients = () => (
     .then(async snapshot => {
       const clientP = snapshot.docs.map(async doc => {
         const client = { id: doc.id, ...doc.data() };
-        client.projects = await getTogglClientProjects(client.togglID);
+
+        const projectsRes = await firestore
+          .collection("projects")
+          .where("client_id", "==", client.togglID + "")
+          .get();
+
+        const projects = projectsRes.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        const asanaProjects = await Promise.all(
+          projects.map(
+            async project => await getAsanaProject(project.asanaProjectID)
+          )
+        );
+        client.projects = asanaProjects;
         return client;
       });
       const clients = await Promise.all(clientP);
@@ -38,7 +54,21 @@ export const getClient = id => (
     .get()
     .then(async doc => {
       const client = { id: doc.id, ...doc.data() };
-      client.projects = await getTogglClientProjects(client.togglID);
+      const projectsRes = await firestore
+        .collection("projects")
+        .where("client_id", "==", client.togglID + "")
+        .get();
+
+      const projects = projectsRes.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      const asanaProjects = await Promise.all(
+        projects.map(
+          async project => await getAsanaProject(project.asanaProjectID)
+        )
+      );
+      client.projects = asanaProjects;
 
       dispatch({
         type: GET_CLIENT,

@@ -1,11 +1,35 @@
-var TogglClient = require("toggl-api");
-var toggl = new TogglClient({ apiToken: "ad1036e708276431da51861a1cf6bd0a" });
+import TogglClient from "toggl-api";
+import axios from "axios";
+export const toggl = new TogglClient({
+  apiToken: "ad1036e708276431da51861a1cf6bd0a"
+});
+let workplace = null;
 
+export const getProjectDetails = async projectID => {
+  const workplace = await getWorkspace();
+  const res = await axios.get(
+    "https://cors-anywhere.herokuapp.com/https://toggl.com/reports/api/v2/project",
+    {
+      params: {
+        user_agent: "node-toggl-api v1.0.1",
+        workspace_id: workplace.id,
+        project_id: projectID
+      },
+      headers: {
+        authorization:
+          "Basic YWQxMDM2ZTcwODI3NjQzMWRhNTE4NjFhMWNmNmJkMGE6YXBpX3Rva2Vu"
+      }
+    }
+  );
+
+  return res.data;
+};
 export const getWorkspace = () =>
   new Promise((resolve, reject) => {
+    if (workplace) resolve(workplace);
     toggl.getWorkspaces((err, data) => {
-      console.log(err, data);
       if (err) console.log(err);
+      workplace = data[0];
       resolve(data[0]);
     });
   });
@@ -20,11 +44,18 @@ export const createClient = async ({ name }) => {
   });
 };
 
-export const createProject = async ({ name }, clientID) => {
+export const createProject = async ({ name, hours }, projectName, clientID) => {
   const workplace = await getWorkspace();
   return new Promise((resolve, reject) => {
     toggl.createProject(
-      { name, wid: workplace.id, cid: clientID, billable: true },
+      {
+        name: projectName + "-" + name,
+        wid: workplace.id,
+        cid: clientID,
+        billable: true,
+        auto_estimates: false,
+        estimated_hours: hours
+      },
       (err, newProject) => {
         if (err) reject(err);
         resolve(newProject);
@@ -51,7 +82,6 @@ export const getTogglClientProjects = async clientID => {
 };
 
 export const createTask = async ({ name, uid, hours }, projectID) => {
-  console.log({ name, projectID });
   return new Promise((resolve, reject) => {
     toggl.createTask(
       name,
@@ -73,6 +103,22 @@ export const getProjectTasks = async projectID => {
   });
 };
 
+export const verifyUser = async email => {
+  const workplace = await getWorkspace();
+  return new Promise((resolve, reject) => {
+    toggl.getWorkspaceUsers(workplace.id, true, (err, users) => {
+      if (err) {
+        reject(err);
+      } else {
+        console.log(users);
+
+        resolve(
+          users.find(user => user.email.toUpperCase() === email.toUpperCase())
+        );
+      }
+    });
+  });
+};
 // export const createTasks = async ({ projectID, data }) => {
 //   console.log({ projectID, data });
 //   const tasksP = data.map(({ name }) => {

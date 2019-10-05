@@ -19,7 +19,13 @@ import {
 } from "reactstrap";
 import Phases from "./Phases";
 
-function NewProjectFixed({ values, handleChange, errors, touched }) {
+function NewProjectFixed({
+  values,
+  handleChange,
+  errors,
+  touched,
+  isSubmitting
+}) {
   const [phases, setPhases] = useState([
     { id: "1", number: "1", name: "", owner: "", hours: "", due_Date: "" }
   ]);
@@ -215,6 +221,7 @@ function NewProjectFixed({ values, handleChange, errors, touched }) {
                     height: "35px"
                   }}
                   className="table-card-button "
+                  disabled={isSubmitting}
                 >
                   Save
                 </Button>
@@ -241,6 +248,7 @@ const CompWithFormik = withFormik({
     material_billing: "monthly"
   }),
   handleSubmit: (values, { props, setSubmitting }) => {
+    setSubmitting(true);
     values.phases = values.phases.filter(phase => phase.name && phase.due_Date);
     props.setData({ ...props.data, ...values });
     props.createProject({ ...props.data, ...values });

@@ -15,7 +15,7 @@ import {
   Button,
   FormFeedback
 } from "reactstrap";
-function NewProjectRetainer({ errors, touched }) {
+function NewProjectRetainer({ errors, touched, isSubmitting }) {
   return (
     <TableCard>
       <h5>Retainer</h5>
@@ -206,6 +206,7 @@ function NewProjectRetainer({ errors, touched }) {
                 width: "70px"
               }}
               className="table-card-button "
+              disabled={isSubmitting}
             >
               Save
             </Button>
@@ -232,6 +233,7 @@ const CompWithFormik = withFormik({
     max_monthly_hours: ""
   }),
   handleSubmit: (values, { props, setSubmitting }) => {
+    setSubmitting(true);
     props.setData({ ...props.data, ...values });
     props.createProject({ ...props.data, ...values });
     setSubmitting(false);

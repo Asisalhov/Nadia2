@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import history from "../../history";
 import { connect } from "react-redux";
+import { getSuppliers } from "../../actions/suppliersActions";
 import { Table, Button, Badge } from "reactstrap";
 
 import TableCard from "../layout/TableCard";
@@ -9,9 +10,16 @@ import CardSearch from "../layout/CardSearch";
 import CardPagination from "../layout/CardPagination";
 import Spinner from "../layout/Spinner";
 
-function SuppliersList() {
+function SuppliersList({ getSuppliers, suppliers }) {
   const [loading, setLoading] = useState(false);
-
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      await getSuppliers();
+      setLoading(false);
+    };
+    getData();
+  }, [getSuppliers]);
   return (
     <div>
       <h3>Suppliers</h3>
@@ -36,17 +44,26 @@ function SuppliersList() {
 
           {!loading ? (
             <tbody>
-              {[1, 2, 3, 4, 4].map(
-                ({ id, official_name, number, contact_person, projects }) => (
+              {suppliers.map(
+                ({
+                  id,
+                  official_name,
+                  number,
+                  contact_person,
+                  email,
+                  projects
+                }) => (
                   <tr
                     style={{
                       cursor: "pointer"
                     }}
+                    key={id}
+                    onClick={() => history.push(`/suppliers/${id}`)}
                   >
-                    <td>Jon</td>
-                    <td>51578454451</td>
-                    <td>Jhon doe</td>
-                    <td>Jhon.doe@gmail.com</td>
+                    <td>{official_name}</td>
+                    <td>{number}</td>
+                    <td>{contact_person}</td>
+                    <td>{email}</td>
                     <td className="">
                       {["payment 1", "payment 1", "payment 1"].map(a => (
                         <Badge
@@ -72,5 +89,10 @@ function SuppliersList() {
     </div>
   );
 }
-
-export default SuppliersList;
+const mapStateToProps = state => ({
+  suppliers: state.suppliers.suppliers
+});
+export default connect(
+  mapStateToProps,
+  { getSuppliers }
+)(SuppliersList);

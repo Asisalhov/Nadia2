@@ -12,7 +12,7 @@ function Phases({ phases, setPhases, users }) {
   return (
     <Form>
       <h5>Phases</h5>
-      {phases.map(({ id, number, name, owner, hours, due_Date }, i) => (
+      {phases.map(({ id, name, owner, hours, due_Date }, i) => (
         <FormGroup row>
           <Col sm={2}>
             <Input
@@ -20,8 +20,9 @@ function Phases({ phases, setPhases, users }) {
               step="1"
               min="1"
               onChange={e => handlePhasesChange(id, e)}
-              value={number}
+              value={i + 1}
               name="number"
+              disabled
               placeholder="Number"
             />
           </Col>
@@ -44,9 +45,7 @@ function Phases({ phases, setPhases, users }) {
               placeholder="Phase Owner"
             >
               {users.map(user => (
-                <option value={user.email}>
-                  {user.firstName} {user.lastName}
-                </option>
+                <option value={user}>{user.name}</option>
               ))}
             </Input>
           </Col>
@@ -76,6 +75,6 @@ function Phases({ phases, setPhases, users }) {
   );
 }
 const mapStateToProps = state => ({
-  users: state.users.users
+  users: state.users.team
 });
 export default connect(mapStateToProps)(Phases);

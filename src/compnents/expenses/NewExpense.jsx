@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getClients } from "../../actions/clientsActions";
+import { getTeamMembers } from "../../actions/usersActions";
+import { getProjects } from "../../actions/projectsActions";
+import { getSuppliers } from "../../actions/suppliersActions";
+import { addExpense } from "../../actions/expensesActions";
+
 import { withFormik, Field, Form } from "formik";
 import * as Yup from "yup";
 
-// import { addExpense } from "../../actions/expensesActions";
 import TableCard from "../layout/TableCard";
 // reactstrap
 import { Table, Input, CustomInput, Button } from "reactstrap";
@@ -14,9 +18,39 @@ import { ReactComponent as Done } from "../../Icons/done.svg";
 import { ReactComponent as Edit } from "../../Icons/edit.svg";
 import { ReactComponent as Close } from "../../Icons/close.svg";
 
-function NewExpense({ handleChange, values }) {
+function NewExpense({
+  handleChange,
+  values,
+  getClients,
+  getTeamMembers,
+  users,
+  clients,
+  projects,
+  getProjects,
+  isSubmitting,
+  getSuppliers,
+  suppliers
+}) {
   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      await Promise.all([
+        getClients(),
+        getTeamMembers(),
+        getProjects(),
+        getSuppliers()
+      ]);
+      setLoading(false);
+    };
+    getData();
+  }, [getClients, getTeamMembers, getProjects, getSuppliers]);
 
+  const [fileName, setFileName] = useState(null);
+  const handleFileChange = e => {
+    values.attachment = e.target.files[0];
+    if (e.target.files[0]) setFileName(e.target.files[0].name);
+  };
   return (
     <div>
       <h3>New expense</h3>
@@ -47,12 +81,12 @@ function NewExpense({ handleChange, values }) {
               </Link>
             </div>
           </div>
-          <fieldset disabled={loading}>
+          <fieldset disabled={loading || isSubmitting}>
             <Table borderless className="table_card_table">
               <thead>
                 <tr>
                   <th width="13%">handling date</th>
-                  <th width="10%">suplier</th>
+                  <th width="10%">supplier</th>
                   <th width="10%">client</th>
                   <th width="15%">project</th>
                   <th width="14%">expense details</th>
@@ -73,7 +107,14 @@ function NewExpense({ handleChange, values }) {
                       type="select"
                       name="supplier_id"
                       onChange={handleChange}
-                    />
+                      defaultValue={suppliers[0] && suppliers[0].id}
+                    >
+                      {suppliers.map(supplier => (
+                        <option value={supplier.id}>
+                          {supplier.official_name}
+                        </option>
+                      ))}
+                    </Input>
                   </td>
                   <td width="10%">
                     <Input
@@ -82,7 +123,14 @@ function NewExpense({ handleChange, values }) {
                       type="select"
                       name="client_id"
                       onChange={handleChange}
-                    />
+                      defaultValue={clients[0] && clients[0].id}
+                    >
+                      {clients.map(client => (
+                        <option value={client.id}>
+                          {client.official_name}
+                        </option>
+                      ))}
+                    </Input>
                   </td>
                   <td width="15%">
                     <Input
@@ -91,7 +139,14 @@ function NewExpense({ handleChange, values }) {
                       type="select"
                       name="project_id"
                       onChange={handleChange}
-                    />
+                      defaultValue={projects[0] && projects[0].id}
+                    >
+                      {projects.map(project => (
+                        <option value={project.id}>
+                          {project.asanaData.name}
+                        </option>
+                      ))}
+                    </Input>
                   </td>
                   <td width="14%">
                     <Input tag={Field} name="details" />
@@ -103,13 +158,29 @@ function NewExpense({ handleChange, values }) {
                       type="select"
                       name="owner_id"
                       onChange={handleChange}
-                    />
+                      defaultValue={users[0] && users[0].id}
+                    >
+                      {users.map(user => (
+                        <option value={user.id}>{user.name}</option>
+                      ))}
+                    </Input>
                   </td>
                   <td width="15%">
                     <Input tag={Field} name="status" />
                   </td>
-                  <td width="10%">
-                    <Input tag={Field} name="charge_client" />
+                  <td
+                    width="10%"
+                    className="d-flex align-items-center justify-content-between"
+                  >
+                    <div className="mr-2">No</div>
+                    <CustomInput
+                      type="switch"
+                      tag={Field}
+                      id="charge_client"
+                      name="charge_client"
+                      onChange={handleChange}
+                    />
+                    <div>Yes</div>
                   </td>
                 </tr>
               </tbody>
@@ -167,8 +238,8 @@ function NewExpense({ handleChange, values }) {
                   <th width="15%">invoice image</th>
 
                   <th colSpan="3">
-                    <div className="d-flex justify-content-around align-items-center">
-                      <div>Client charged for hours</div>
+                    <div className="d-flex align-items-center">
+                      <div className="mr-4">Client charged for hours</div>
                       <CustomInput
                         onChange={handleChange}
                         label
@@ -209,6 +280,7 @@ function NewExpense({ handleChange, values }) {
                       type="select"
                       name="payment_terms"
                       onChange={handleChange}
+                      defaultValue="CASH"
                     >
                       <option value="CASH">CASH</option>
                       <option value="EOM + 30">EOM + 30</option>
@@ -221,7 +293,13 @@ function NewExpense({ handleChange, values }) {
                   </td>
 
                   <td width="15%">
-                    <Input tag={Field} name="invoice_img" />
+                    <CustomInput
+                      type="file"
+                      name="attachment"
+                      label={fileName || "choose file"}
+                      id="attachmentInput"
+                      onChange={handleFileChange}
+                    />
                   </td>
                 </tr>
               </tbody>
@@ -234,12 +312,12 @@ function NewExpense({ handleChange, values }) {
 }
 
 const CompWithFormik = withFormik({
-  mapPropsToValues: () => ({
+  mapPropsToValues: ({ users, clients, projects, suppliers }) => ({
     handling_date: "",
-    supplier_id: "",
-    client_id: "",
-    project_id: "ILS",
-    owner_id: "",
+    supplier_id: suppliers[0] ? suppliers[0].id : "",
+    client_id: clients[0] ? clients[0].id : "",
+    project_id: projects[0] ? projects[0].id : "",
+    owner_id: users[0] ? users[0].id : "",
     status: "",
     charge_client: "",
     invoice_date: "",
@@ -248,21 +326,25 @@ const CompWithFormik = withFormik({
     performa_invoice: "",
     tax_invoice: "",
     internal_po: "",
-    currency: "",
-    payment_terms: "",
-    invoice_img: ""
+    currency: "NIS",
+    payment_terms: ""
   }),
-  handleSubmit: (values, { props, setSubmitting }) => {
-    // props.setBuissModle(values.business_modle);
-    // props.setBuissModle(values.business_modle);
-    // props.setData({ ...props.data, ...values });
-    // props.setStep(2);
-    // setSubmitting(false);
+  enableReinitialize: true,
+
+  handleSubmit: (values, { props: { addExpense }, setSubmitting }) => {
+    setSubmitting(true);
+    console.log(values);
+    addExpense(values);
   },
   validationSchema: Yup.object().shape({})
 })(NewExpense);
-const mapStateToProps = state => ({ clients: state.clients.clients });
+const mapStateToProps = state => ({
+  clients: state.clients.clients,
+  users: state.users.team,
+  projects: state.projects.projects,
+  suppliers: state.suppliers.suppliers
+});
 export default connect(
   mapStateToProps,
-  { getClients }
+  { getClients, getTeamMembers, getProjects, getSuppliers, addExpense }
 )(CompWithFormik);

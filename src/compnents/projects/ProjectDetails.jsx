@@ -11,6 +11,8 @@ import { ReactComponent as Done } from "../../Icons/done.svg";
 import { ReactComponent as Edit } from "../../Icons/edit.svg";
 import { ReactComponent as Close } from "../../Icons/close.svg";
 import { ReactComponent as Attachment } from "../../Icons/attachment.svg";
+import { ReactComponent as Complete } from "../../Icons/completed.svg";
+import { ReactComponent as UnComplete } from "../../Icons/uncomplete.svg";
 
 function ProjectDetails(props) {
   const { project, getProject, match } = props;
@@ -83,15 +85,16 @@ function ProjectDetails(props) {
             <tbody>
               {project.tasks.map(
                 ({
-                  name,
                   hours_max,
                   hours_min,
                   hours_act,
+                  hours,
                   owner,
                   progress,
-                  due_date,
+                  due_Date,
                   expenses,
-                  completion
+                  completion,
+                  toggl: { name, duration }
                 }) => (
                   <tr
                     style={{
@@ -99,16 +102,38 @@ function ProjectDetails(props) {
                     }}
                   >
                     <td>{name}</td>
-                    <td>30</td>
-                    <td>20</td>
-                    <td>20</td>
+                    <td>{hours}</td>
+                    <td>{hours}</td>
+                    <td>
+                      {duration ? (duration / 1000 / 60 / 60).toFixed(0) : "-"}
+                    </td>
                     <td>Mustapha lounici</td>
                     <td>
-                      <Progress value={50} />
+                      <Progress
+                        color={
+                          duration
+                            ? duration / 1000 / 60 / 60 / hours > hours
+                              ? "danger"
+                              : "primary"
+                            : ""
+                        }
+                        value={
+                          duration
+                            ? (duration / 1000 / 60 / 60 / hours) * 100
+                            : 0
+                        }
+                      />
                     </td>
-                    <td>11-02-2016</td>
+                    <td>{due_Date}</td>
                     <td>500$</td>
-                    <td>X</td>
+                    <td
+                      style={{
+                        fontSize: "1.5em",
+                        paddingLeft: "2em"
+                      }}
+                    >
+                      <UnComplete />
+                    </td>
                   </tr>
                 )
               )}
