@@ -9,6 +9,7 @@ import NewProjectBasic from "./NewProjectBasic";
 import NewProjectFixed from "./NewProjectFixed";
 import NewProjectRetainer from "./NewProjectRetainer";
 import NewProjectTM from "./NewProjectTM";
+import Spinner from "../layout/Spinner";
 
 function NewProject({ addProject, getTeamMembers, getClients }) {
   const [loading, setLoading] = useState(true);
@@ -49,11 +50,11 @@ function NewProject({ addProject, getTeamMembers, getClients }) {
       StepTwo = NewProjectBasic;
       break;
   }
-  if (loading) return null;
+  if (loading) return <Spinner />;
   return (
     <div>
       <h3>
-        New Project <small>- client name</small>
+        New Project <small>- {projectData.project_name || "client name"}</small>
       </h3>
       {step === 1 ? (
         <NewProjectBasic
@@ -67,6 +68,7 @@ function NewProject({ addProject, getTeamMembers, getClients }) {
           data={projectData}
           setData={setProjectData}
           createProject={createProject}
+          setStep={setStep}
         />
       )}
     </div>

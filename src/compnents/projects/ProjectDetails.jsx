@@ -1,38 +1,81 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
-import { getProject } from "../../actions/projectsActions";
+import { getProject, updatePhases } from "../../actions/projectsActions";
+import { getTeamMembers } from "../../actions/usersActions";
 import TableCard from "../layout/TableCard";
-import CardPagination from "../layout/CardPagination";
 import Spinner from "../layout/Spinner";
 import { Link } from "react-router-dom";
 import { Button, Table, Progress } from "reactstrap";
-
+import uid from "uid";
+import firebase, { firestore } from "../../config/firebase";
 import { ReactComponent as Done } from "../../Icons/done.svg";
 import { ReactComponent as Edit } from "../../Icons/edit.svg";
 import { ReactComponent as Close } from "../../Icons/close.svg";
 import { ReactComponent as Attachment } from "../../Icons/attachment.svg";
 import { ReactComponent as Complete } from "../../Icons/completed.svg";
 import { ReactComponent as UnComplete } from "../../Icons/uncomplete.svg";
+import Phases from "./Phases";
 
 function ProjectDetails(props) {
-  const { project, getProject, match } = props;
+  const { project, getProject, match, updatePhases, getTeamMembers } = props;
 
   const [loading, setLoading] = useState(true);
   const [canEdit, setCanEdit] = useState(false);
-
+  const [phases, setPhases] = useState([]);
+  const uploadRef = useRef();
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
-      await getProject(match.params.id);
+      await Promise.all([getProject(match.params.id)]);
+      getTeamMembers();
       setLoading(false);
     };
     getData();
-  }, [getProject, match.params.id]);
-  const onSubmit = () => {};
+  }, [getProject, match.params.id, getTeamMembers]);
+  const addPhase = () => {
+    setPhases([
+      ...phases,
+      {
+        id: uid(),
+        number: "",
+        name: "",
+        owner: "",
+        hours: "",
+        due_Date: ""
+      }
+    ]);
+  };
+  const onSubmit = async () => {
+    setCanEdit(false);
+    if (phases.length > 0) {
+      setLoading(true);
+      await updatePhases(phases);
+      await getProject(match.params.id);
+      setLoading(false);
+    }
+    await firestore.collection("projects").add(project);
+  };
+
+  const uploadAttachment = async e => {
+    let attachment = e.target.files[0];
+    const storageRef = firebase.storage().ref("/attachments");
+
+    if (attachment) {
+      const attachmentImage = await storageRef
+        .child(attachment.name)
+        .put(attachment);
+      attachment = await attachmentImage.ref.getDownloadURL();
+      await firestore
+        .collection("projects")
+        .doc(project.id)
+        .update({
+          attachment
+        });
+    }
+  };
   return (
     <div>
       <h3>
-        {" "}
         <small>{project.project_name}</small>
       </h3>
 
@@ -50,13 +93,23 @@ function ProjectDetails(props) {
             </Button>
             <Button
               size="lg"
-              className="btn-circle table-card-button  mr-2"
+              className={`btn-circle table-card-button mr-2 ${
+                !canEdit ? "disabled" : ""
+              }`}
               onClick={onSubmit}
             >
               <Done />
             </Button>
             <Button size="lg" className="btn-circle table-card-button ">
-              <Attachment />
+              <input
+                type="file"
+                ref={uploadRef}
+                style={{
+                  display: "none"
+                }}
+                onChange={uploadAttachment}
+              />
+              <Attachment onClick={() => uploadRef.current.click()} />
             </Button>
           </div>
           <div>
@@ -107,10 +160,10 @@ function ProjectDetails(props) {
                     <td>
                       {duration ? (duration / 1000 / 60 / 60).toFixed(0) : "-"}
                     </td>
-                    <td>Mustapha lounici</td>
+                    <td>{owner.name}</td>
                     <td>
                       <Progress
-                        color={
+                        className={
                           duration
                             ? duration / 1000 / 60 / 60 / hours > hours
                               ? "danger"
@@ -140,6 +193,18 @@ function ProjectDetails(props) {
             </tbody>
           ) : null}
         </Table>
+        {canEdit && (
+          <div>
+            <Phases phases={phases} setPhases={setPhases} title={false} />
+            <Button
+              size="sm"
+              className="px-2 my-1 header_btn"
+              onClick={addPhase}
+            >
+              Add Phase
+            </Button>
+          </div>
+        )}
         <Table borderless className="table_card_table">
           <thead>
             <tr>
@@ -199,6 +264,13 @@ function ProjectDetails(props) {
                 </td>
                 <td>
                   <p>{project.po_number}</p>
+                  {canEdit && (
+                    <div>
+                      <Button size="sm" className="mx-2 px-2 my-1 header_btn">
+                        Add new PO
+                      </Button>
+                    </div>
+                  )}
                 </td>
                 <td>
                   <p>
@@ -215,9 +287,6 @@ function ProjectDetails(props) {
           ) : null}
         </Table>
         {loading ? <Spinner /> : null}
-        <div className="d-flex justify-content-end">
-          <CardPagination />
-        </div>
       </TableCard>
     </div>
   );
@@ -228,6 +297,8 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   {
-    getProject
+    getProject,
+    updatePhases,
+    getTeamMembers
   }
 )(ProjectDetails);

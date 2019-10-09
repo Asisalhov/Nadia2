@@ -113,7 +113,7 @@ export const updateClient = async updClient => {
   } = updClient;
   try {
     const res = await axios.put(
-      `https://api.greeninvoice.co.il/api/v1/clients/${id}`,
+      `https://api.greeninvoice.co.il/api/v1/clients/${updClient.id}`,
       {
         name: official_name,
         active: true,
@@ -215,7 +215,7 @@ export const updateSupplier = async updSupplier => {
   } = updSupplier;
   try {
     const res = await axios.put(
-      `https://api.greeninvoice.co.il/api/v1/suppliers/${id}`,
+      `https://api.greeninvoice.co.il/api/v1/suppliers/${updSupplier.id}`,
       {
         name: official_name,
         active: true,

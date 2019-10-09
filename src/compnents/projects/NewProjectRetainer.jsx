@@ -15,7 +15,7 @@ import {
   Button,
   FormFeedback
 } from "reactstrap";
-function NewProjectRetainer({ errors, touched, isSubmitting }) {
+function NewProjectRetainer({ errors, touched, isSubmitting, setStep }) {
   return (
     <TableCard>
       <h5>Retainer</h5>
@@ -196,8 +196,8 @@ function NewProjectRetainer({ errors, touched, isSubmitting }) {
               style={{
                 width: "70px"
               }}
+              onClick={() => setStep(1)}
               className="table-card-button mr-3"
-              type="button"
             >
               Back
             </Button>
@@ -239,30 +239,18 @@ const CompWithFormik = withFormik({
     setSubmitting(false);
   },
   validationSchema: Yup.object().shape({
-    product_designer_rate: Yup.number()
-      .positive()
-      .required("This Field is Required"),
-    mec_designer_rate: Yup.number()
-      .positive()
-      .required("This Field is Required"),
-    digital_designer_rate: Yup.number()
-      .positive()
-      .required("This Field is Required"),
-    vp_rate: Yup.number()
-      .positive()
-      .required("This Field is Required"),
-    partner_rate: Yup.number()
-      .positive()
-      .required("This Field is Required"),
-    monthly_fee: Yup.number()
-      .positive()
-      .required("This Field is Required"),
-    po_number: Yup.string().required("This Field is Required"),
-    po_amount: Yup.string().required("This Field is Required"),
-    down_payment_fee: Yup.string().required("This Field is Required"),
+    product_designer_rate: Yup.number().min(0),
+    mec_designer_rate: Yup.number().min(0),
+    digital_designer_rate: Yup.number().min(0),
+    vp_rate: Yup.number().min(0),
+    partner_rate: Yup.number().min(0),
+    monthly_fee: Yup.number().min(0),
+    po_number: Yup.string(),
+    po_amount: Yup.string(),
+    down_payment_fee: Yup.string(),
     start_date: Yup.date().required("This Field is Required"),
     end_date: Yup.date().required("This Field is Required"),
-    max_monthly_hours: Yup.number().required("This Field is Required")
+    max_monthly_hours: Yup.number()
   })
 })(NewProjectRetainer);
 const mapStateToProps = state => ({ clients: state.clients.clients });

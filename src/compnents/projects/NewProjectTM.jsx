@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-// import { Link } from "react-router-dom";
 import uid from "uid";
 import { connect } from "react-redux";
 import { getClients } from "../../actions/clientsActions";
@@ -19,7 +18,14 @@ import {
 } from "reactstrap";
 import Phases from "./Phases";
 
-function NewProjectTM({ values, handleSubmit, errors, touched, isSubmitting }) {
+function NewProjectTM({
+  values,
+  handleSubmit,
+  errors,
+  touched,
+  isSubmitting,
+  setStep
+}) {
   const [phases, setPhases] = useState([
     { id: "1", number: "1", name: "", owner: "", hours: "", due_Date: "" }
   ]);
@@ -187,12 +193,12 @@ function NewProjectTM({ values, handleSubmit, errors, touched, isSubmitting }) {
               <div className="py-2">
                 <Button
                   style={{
-                    width: "70px",
-                    height: "35px"
+                    width: "70px"
                   }}
+                  onClick={() => setStep(1)}
                   className="table-card-button mr-3"
                 >
-                  Cancel
+                  Back
                 </Button>
                 <Button
                   style={{
@@ -200,6 +206,7 @@ function NewProjectTM({ values, handleSubmit, errors, touched, isSubmitting }) {
                     height: "35px"
                   }}
                   className="table-card-button "
+                  type="submit"
                   disabled={isSubmitting}
                 >
                   Save
@@ -230,30 +237,17 @@ const CompWithFormik = withFormik({
     values.phases = values.phases.filter(phase => phase.name && phase.due_Date);
     props.setData({ ...props.data, ...values });
     props.createProject({ ...props.data, ...values });
-    setSubmitting(false);
   },
   validationSchema: Yup.object().shape({
-    product_designer_rate: Yup.number()
-      .positive()
-      .required("This Field is Required"),
-    mec_designer_rate: Yup.number()
-      .positive()
-      .required("This Field is Required"),
-    digital_designer_rate: Yup.number()
-      .positive()
-      .required("This Field is Required"),
-    vp_rate: Yup.number()
-      .positive()
-      .required("This Field is Required"),
-    partner_rate: Yup.number()
-      .positive()
-      .required("This Field is Required"),
-    monthly_fee: Yup.number()
-      .positive()
-      .required("This Field is Required"),
-    po_number: Yup.string().required("This Field is Required"),
-    po_hours: Yup.number().required("This Field is Required"),
-    down_payment_fee: Yup.string().required("This Field is Required")
+    product_designer_rate: Yup.number().min(0),
+    mec_designer_rate: Yup.number().min(0),
+    digital_designer_rate: Yup.number().min(0),
+    vp_rate: Yup.number().min(0),
+    partner_rate: Yup.number().min(0),
+    monthly_fee: Yup.number().min(0),
+    po_number: Yup.string(),
+    po_hours: Yup.number(),
+    down_payment_fee: Yup.string()
   })
 })(NewProjectTM);
 const mapStateToProps = state => ({ clients: state.clients.clients });

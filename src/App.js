@@ -10,6 +10,7 @@ import { auth } from "./config/firebase";
 // style
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-datepicker/dist/react-datepicker.css";
 import "./App.css";
 
 // components
@@ -24,7 +25,7 @@ import SideMenu from "./compnents/layout/SideMenu";
 
 // import UnderDev from "./compnents/layout/UnderDev";
 import Clients from "./compnents/clients";
-import Payments from "./compnents/payments/Payments";
+import Payments from "./compnents/payments/";
 import Projects from "./compnents/projects";
 import Expenses from "./compnents/expenses";
 import Suppliers from "./compnents/suppliers";

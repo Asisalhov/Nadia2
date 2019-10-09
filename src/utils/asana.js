@@ -64,7 +64,11 @@ export const createTasks = async ({ projectID, data }) => {
       name,
       due_on: due_date
     });
-    await client.tasks.addProject(task.gid, { project: projectID });
+    await Promise.all([
+      client.tasks.addProject(task.gid, { project: projectID }),
+      client.tasks.update(task.gid, { assignee: owner.email })
+    ]);
+
     return task;
   });
 

@@ -32,3 +32,8 @@ export const GET_EXPENSES = "GET_EXPENSES";
 export const GET_EXPENSE = "GET_EXPENSE";
 export const ADD_EXPENSE = "ADD_EXPENSE";
 export const EDIT_EXPENSE = "EDIT_EXPENSE";
+
+export const GET_PAYMENTS = "GET_PAYMENTS";
+export const GET_PAYMENT = "GET_PAYMENT";
+export const ADD_PAYMENT = "ADD_PAYMENT";
+export const EDIT_PAYMENT = "EDIT_PAYMENT";

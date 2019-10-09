@@ -29,7 +29,6 @@ function NewProjectBasic({
   isSubmitting
 }) {
   const [fileName, setFileName] = useState(null);
-
   const handleFileChange = e => {
     values.attachment = e.target.files[0];
     if (e.target.files[0]) setFileName(e.target.files[0].name);
@@ -213,11 +212,11 @@ function NewProjectBasic({
                 />
               </Col>
             </FormGroup>
-            <FormGroup row>
+            <FormGroup row className="pt-4">
               <Label for="material_subcon_billing" sm={3}>
                 Material & SubCon Billing
               </Label>
-              <Col sm={9} className="d-flex">
+              <Col sm={9} className="d-flex ">
                 <CustomInput
                   tag={Field}
                   type="checkbox"
@@ -252,7 +251,7 @@ function NewProjectBasic({
               className="table-card-button "
               disabled={isSubmitting}
             >
-              Save
+              Next
             </Button>
           </div>
         </div>
@@ -261,17 +260,17 @@ function NewProjectBasic({
   );
 }
 const CompWithFormik = withFormik({
-  mapPropsToValues: () => ({
-    project_name: "",
-    client_id: "",
-    owner: "",
-    currnecy: "ILS",
-    commission_local: "",
-    commission_import: "",
-    business_modle: "TM_monthly",
-    attachment: null,
-    comments: "",
-    material_subcon_billing: true
+  mapPropsToValues: ({ data }) => ({
+    project_name: data.project_name,
+    client_id: data.client_id,
+    owner: data.owner && data.owner.email,
+    currnecy: data.currnecy || "ILS",
+    commission_local: data.commission_local,
+    commission_import: data.commission_import,
+    business_modle: data.business_modle || "TM_monthly",
+    attachment: data.attachment || null,
+    comments: data.comments || "",
+    material_subcon_billing: !!data.material_subcon_billing
   }),
   handleSubmit: (values, { props, setSubmitting }) => {
     setSubmitting(true);

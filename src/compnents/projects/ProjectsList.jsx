@@ -76,7 +76,11 @@ function ProjectsList({ projects, getProjects }) {
                         color="primary"
                         style={{
                           backgroundColor:
-                            current_status && current_status.color,
+                            current_status && current_status.color === "green"
+                              ? "#4AD991"
+                              : current_status.color === "red"
+                              ? "#FF6565"
+                              : current_status.color,
                           color: "#4d4f5c"
                         }}
                         pill

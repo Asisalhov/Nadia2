@@ -56,25 +56,7 @@ function NewExpense({
       <h3>New expense</h3>
       <Form>
         <TableCard>
-          <div className="d-flex justify-content-between table_card_header">
-            <div className="d-flex">
-              <Button
-                tag={Link}
-                to={`/expenses/:id/edit`}
-                size="lg"
-                className="btn-circle table-card-button mr-2"
-                disabled
-              >
-                <Edit />
-              </Button>
-              <Button
-                size="lg"
-                className="btn-circle table-card-button "
-                type="submit"
-              >
-                <Done />
-              </Button>
-            </div>
+          <div className="d-flex justify-content-end table_card_header">
             <div>
               <Link to="/expenses">
                 <Close />
@@ -305,6 +287,13 @@ function NewExpense({
               </tbody>
             </Table>
           </fieldset>
+          <div className="d-flex justify-content-end table_card_header">
+            <div className="d-flex">
+              <Button size="lg" className="table-card-button " type="submit">
+                Save
+              </Button>
+            </div>
+          </div>
         </TableCard>
       </Form>
     </div>
@@ -327,7 +316,8 @@ const CompWithFormik = withFormik({
     tax_invoice: "",
     internal_po: "",
     currency: "NIS",
-    payment_terms: ""
+    payment_terms: "",
+    details: ""
   }),
   enableReinitialize: true,
 

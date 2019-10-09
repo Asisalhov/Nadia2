@@ -52,11 +52,9 @@ export const getProject = id => (
     .then(async doc => {
       let project = { id: doc.id, ...doc.data() };
       const phasesDoc = await doc.ref.collection("phases").get();
-      console.log(phasesDoc);
       const phasesP = phasesDoc.docs.map(async phaseDoc => {
         const phase = phaseDoc.data();
         const res = await getTogglProjectDetails(phase.togglTaskID);
-        console.log({ toggl: res, ...phase });
         return { toggl: res, ...phase };
       });
       const tasks = await Promise.all(phasesP);
@@ -157,4 +155,48 @@ export const editProject = (id, updProject) => (
         payload: { id, ...updProject }
       });
     });
+};
+
+export const updatePhases = phases => async (
+  dispatch,
+  getState,
+  { getFirebase, getFirestore }
+) => {
+  const state = getState();
+  const users = state.users.team;
+  const project = state.projects.currentProject;
+  const firestore = getFirestore();
+
+  const tasksP = phases.map(async phase => {
+    phase.owner = users.find(user => user.id === phase.owner);
+    const [asanaTask, togglTask] = await Promise.all([
+      createAsanaTask({
+        projectID: project.asanaProjectID,
+        data: phase
+      }),
+      createTogglProject(phase, project.project_name, project.client_id),
+      firestore
+        .collection("projects")
+        .doc(project.id)
+        .update({
+          phases: firestore.FieldValue.arrayUnion(phase)
+        })
+    ]);
+
+    return firestore
+      .collection("projects")
+      .doc(project.id)
+      .collection("phases")
+      .add({
+        asanaTaskID: asanaTask.gid,
+        togglTaskID: togglTask.id,
+        ...phase
+      });
+  });
+  await Promise.all(tasksP);
+
+  dispatch({
+    type: EDIT_PROJECT,
+    payload: { ...project }
+  });
 };

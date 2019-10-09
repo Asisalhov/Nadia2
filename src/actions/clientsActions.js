@@ -4,7 +4,10 @@ import {
   createClient as createTogglClient,
   getTogglClientProjects
 } from "../utils/toggl";
+
+import { addClient as addGIClient } from "../utils/greenInvoice";
 import { getProject as getAsanaProject } from "../utils/asana";
+
 export const getClients = () => (
   dispatch,
   getState,
@@ -85,18 +88,20 @@ export const addClient = newClient => async (
     name: newClient.official_name
   });
   newClient.togglID = togglClient.id;
-
   const firestore = getFirestore();
-  return firestore
-    .collection("clients")
-    .add(newClient)
-    .then(snapshot => {
-      dispatch({
-        type: ADD_CLIENT,
-        payload: { id: snapshot.id, ...newClient }
-      });
-      history.push("/clients");
-    });
+  return Promise.all([
+    addGIClient(newClient),
+    firestore
+      .collection("clients")
+      .add(newClient)
+      .then(snapshot => {
+        dispatch({
+          type: ADD_CLIENT,
+          payload: { id: snapshot.id, ...newClient }
+        });
+        history.push("/clients");
+      })
+  ]);
 };
 
 export const editClient = (id, updClient) => (

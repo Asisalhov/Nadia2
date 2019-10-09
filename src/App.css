@@ -172,6 +172,10 @@ a.login_forget_password {
   padding: 0 0.3rem;
   font-size: 13px;
 }
+.input-group-append {
+  height: 25px !important;
+  font-size: 13px;
+}
 .table_card_table select {
   height: 25px !important;
   padding: 0 0.2rem;
@@ -335,4 +339,16 @@ a.btn-circle {
 .table-no-hover tbody tr:hover {
   color: inherit;
   background-color: inherit;
+}
+.progress.primary .progress-bar {
+  background: #4ad991 !important;
+}
+.progress.danger .progress-bar {
+  background: #e04b4b;
+}
+.progress.warning .progress-bar {
+  background: #efdc2d;
+}
+.new_project .custom-file-label {
+  padding: 0.375rem 0.75rem;
 }

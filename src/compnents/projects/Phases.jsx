@@ -1,19 +1,23 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { FormGroup, Col, Input, Form } from "reactstrap";
-function Phases({ phases, setPhases, users }) {
+import { FormGroup, Col, Input, Form, Button } from "reactstrap";
+function Phases({ phases, setPhases, users, title = true }) {
   const handlePhasesChange = (id, e) => {
     const newPhases = phases.map(phase =>
       phase.id === id ? { ...phase, [e.target.name]: e.target.value } : phase
     );
     setPhases(newPhases);
   };
+  const deletePhase = id => {
+    const newPhases = phases.filter(phase => phase.id !== id);
+    setPhases(newPhases);
+  };
   return (
     <Form>
-      <h5>Phases</h5>
+      {title && <h5>Phases</h5>}
       {phases.map(({ id, name, owner, hours, due_Date }, i) => (
-        <FormGroup row>
+        <FormGroup row className={`${title ? "" : "p-0"}`}>
           <Col sm={2}>
             <Input
               type="number"
@@ -26,7 +30,7 @@ function Phases({ phases, setPhases, users }) {
               placeholder="Number"
             />
           </Col>
-          <Col sm={4}>
+          <Col sm={3}>
             <Input
               type="text"
               value={name}
@@ -45,7 +49,7 @@ function Phases({ phases, setPhases, users }) {
               placeholder="Phase Owner"
             >
               {users.map(user => (
-                <option value={user}>{user.name}</option>
+                <option value={title ? user : user.id}>{user.name}</option>
               ))}
             </Input>
           </Col>
@@ -68,6 +72,9 @@ function Phases({ phases, setPhases, users }) {
               onChange={e => handlePhasesChange(id, e)}
               placeholder="Due Date"
             />
+          </Col>
+          <Col sm={1}>
+            <Button onClick={() => deletePhase(id)}>Delete</Button>
           </Col>
         </FormGroup>
       ))}

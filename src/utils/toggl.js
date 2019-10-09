@@ -3,7 +3,7 @@ import axios from "axios";
 export const toggl = new TogglClient({
   apiToken: "ad1036e708276431da51861a1cf6bd0a"
 });
-let workplace = null;
+var workplace = null;
 
 export const getProjectDetails = async projectID => {
   const workplace = await getWorkspace();
@@ -66,7 +66,6 @@ export const createProject = async ({ name, hours }, projectName, clientID) => {
 
 export const getTogglClientProjects = async clientID => {
   const workplace = await getWorkspace();
-  console.log(workplace);
   return new Promise((resolve, reject) => {
     toggl.getWorkspaceProjects(workplace.id, (err, projects) => {
       if (err) reject(err);
@@ -110,8 +109,6 @@ export const verifyUser = async email => {
       if (err) {
         reject(err);
       } else {
-        console.log(users);
-
         resolve(
           users.find(user => user.email.toUpperCase() === email.toUpperCase())
         );
