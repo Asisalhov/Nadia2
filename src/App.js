@@ -33,6 +33,7 @@ import Settings from "./compnents/settings";
 import PrivateRoute from "./compnents/auth/PrivateRoute";
 import PublicRoute from "./compnents/auth/PublicRoute";
 import Home from "./compnents/home/Home";
+import Reports from "./compnents/reports/";
 
 import { verifyUser } from "./actions/authActions";
 
@@ -79,8 +80,9 @@ function Panel() {
             <Route path="/projects" component={Projects} />
             <Route path="/payments" component={Payments} />
             <Route path="/expenses" component={Expenses} />
-            <Route path="/suppliers" component={Suppliers} />
             <Route path="/settings" component={Settings} />
+            <Route path="/suppliers" component={Suppliers} />
+            <Route path="/reports" component={Reports} />
             <Route path="/home" component={Home} />
           </Switch>
         </div>

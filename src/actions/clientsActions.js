@@ -89,19 +89,18 @@ export const addClient = newClient => async (
   });
   newClient.togglID = togglClient.id;
   const firestore = getFirestore();
-  return Promise.all([
-    addGIClient(newClient),
-    firestore
-      .collection("clients")
-      .add(newClient)
-      .then(snapshot => {
-        dispatch({
-          type: ADD_CLIENT,
-          payload: { id: snapshot.id, ...newClient }
-        });
-        history.push("/clients");
-      })
-  ]);
+
+  const GIclient = await addGIClient(newClient);
+  return firestore
+    .collection("clients")
+    .add(newClient)
+    .then(snapshot => {
+      dispatch({
+        type: ADD_CLIENT,
+        payload: { id: snapshot.id, ...newClient, greeninvoiceID: GIclient.id }
+      });
+      history.push("/clients");
+    });
 };
 
 export const editClient = (id, updClient) => (

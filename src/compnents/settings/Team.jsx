@@ -75,7 +75,11 @@ function Team({ getTeamMembers, team }) {
                       cursor: "pointer"
                     }}
                   >
-                    <td>{name}</td>
+                    <td>
+                      <Link to={`/settings/team/${id}`} style={{}}>
+                        {name}
+                      </Link>
+                    </td>
                     <td>{email}</td>
                     <td>{role}</td>
                     <td>{team}</td>

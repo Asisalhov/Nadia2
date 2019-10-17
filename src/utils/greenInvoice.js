@@ -49,8 +49,8 @@ export const getClient = async id => {
 
   try {
     const res = await axios.get(
-      `https://api.greeninvoice.co.il/api/v1/clients/${id}`,
-      { headers: { Authorization: "bearer " + token } }
+      `https://sandbox.d.greeninvoice.co.il/api/v1/clients/${id}`,
+      { headers: { Authorization: "Bearer " + token } }
     );
     return res.data;
   } catch (error) {
@@ -60,23 +60,24 @@ export const getClient = async id => {
 
 export const addClient = async newClient => {
   const token = await verifyGreenInvoiceToken();
+
   const {
-    official_name,
-    number,
-    contact_person,
-    phone_number,
-    email,
-    address,
-    country,
+    official_name = "mustapha",
+    number = 1,
+    contact_person = "mustapha",
+    phone_number = "144555",
+    email = "m@m.com",
+    address = "hi",
+    country = "DZ",
     send_invoice_auto,
     finance_contact,
-    finance_email,
+    finance_email = "m@m.com",
     currency,
     payment_terms
   } = newClient;
   try {
     const res = await axios.post(
-      `https://api.greeninvoice.co.il/api/v1/clients`,
+      `https://sandbox.d.greeninvoice.co.il/api/v1/clients`,
       {
         name: official_name,
         active: true,
@@ -88,13 +89,14 @@ export const addClient = async newClient => {
         contactPerson: contact_person,
         emails: [email, finance_email]
       },
-      { headers: { Authorization: "bearer " + token } }
+      { headers: { Authorization: "Bearer " + token } }
     );
     return res.data;
   } catch (error) {
     console.log(error);
   }
 };
+
 export const updateClient = async updClient => {
   const token = await verifyGreenInvoiceToken();
   const {
@@ -113,7 +115,7 @@ export const updateClient = async updClient => {
   } = updClient;
   try {
     const res = await axios.put(
-      `https://api.greeninvoice.co.il/api/v1/clients/${updClient.id}`,
+      `https://sandbox.d.greeninvoice.co.il/api/v1/clients/${updClient.id}`,
       {
         name: official_name,
         active: true,
@@ -125,7 +127,7 @@ export const updateClient = async updClient => {
         contactPerson: contact_person,
         emails: [email, finance_email]
       },
-      { headers: { Authorization: "bearer " + token } }
+      { headers: { Authorization: "Bearer " + token } }
     );
     return res.data;
   } catch (error) {
@@ -136,9 +138,9 @@ export const deleteClient = async id => {
   const token = await verifyGreenInvoiceToken();
   try {
     const res = await axios.delete(
-      `https://api.greeninvoice.co.il/api/v1/clients/${id}`,
+      `https://sandbox.d.greeninvoice.co.il/api/v1/clients/${id}`,
 
-      { headers: { Authorization: "bearer " + token } }
+      { headers: { Authorization: "Bearer " + token } }
     );
     return res.data;
   } catch (error) {
@@ -151,8 +153,8 @@ export const getSupplier = async id => {
   const token = await verifyGreenInvoiceToken();
   try {
     const res = await axios.get(
-      `https://api.greeninvoice.co.il/api/v1/suppliers/${id}`,
-      { headers: { Authorization: "bearer " + token } }
+      `https://sandbox.d.greeninvoice.co.il/api/v1/suppliers/${id}`,
+      { headers: { Authorization: "Bearer " + token } }
     );
     return res.data;
   } catch (error) {
@@ -178,7 +180,7 @@ export const addSupplier = async newSupplier => {
   } = newSupplier;
   try {
     const res = await axios.post(
-      `https://api.greeninvoice.co.il/api/v1/suppliers`,
+      `https://sandbox.d.greeninvoice.co.il/api/v1/suppliers`,
       {
         name: official_name,
         active: true,
@@ -190,7 +192,7 @@ export const addSupplier = async newSupplier => {
         contactPerson: contact_person,
         emails: [email, finance_email]
       },
-      { headers: { Authorization: "bearer " + token } }
+      { headers: { Authorization: "Bearer " + token } }
     );
     return res.data;
   } catch (error) {
@@ -215,7 +217,7 @@ export const updateSupplier = async updSupplier => {
   } = updSupplier;
   try {
     const res = await axios.put(
-      `https://api.greeninvoice.co.il/api/v1/suppliers/${updSupplier.id}`,
+      `https://sandbox.d.greeninvoice.co.il/api/v1/suppliers/${updSupplier.id}`,
       {
         name: official_name,
         active: true,
@@ -227,7 +229,7 @@ export const updateSupplier = async updSupplier => {
         contactPerson: contact_person,
         emails: [email, finance_email]
       },
-      { headers: { Authorization: "bearer " + token } }
+      { headers: { Authorization: "Bearer " + token } }
     );
     return res.data;
   } catch (error) {
@@ -239,9 +241,9 @@ export const deleteSupplier = async id => {
   const token = await verifyGreenInvoiceToken();
   try {
     const res = await axios.delete(
-      `https://api.greeninvoice.co.il/api/v1/suppliers/${id}`,
+      `https://sandbox.d.greeninvoice.co.il/api/v1/suppliers/${id}`,
 
-      { headers: { Authorization: "bearer " + token } }
+      { headers: { Authorization: "Bearer " + token } }
     );
     return res.data;
   } catch (error) {

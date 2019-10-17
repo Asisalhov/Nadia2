@@ -1,6 +1,8 @@
 export const GET_USERS = "GET_USERS";
 export const ADD_TEAM_MEMBER = "ADD_TEAM_MEMBER";
 export const GET_TEAM_MEMBERS = "GET_TEAM_MEMBERS";
+export const GET_TEAM_MEMBER = "GET_TEAM_MEMBER";
+export const UPDATE_TEAM_MEMBER = "UPDATE_TEAM_MEMBER";
 
 export const GET_CLIENTS = "GET_CLIENTS";
 export const GET_CLIENT = "GET_CLIENT";
