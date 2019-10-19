@@ -31,7 +31,6 @@ export const updatePresets = newPresets => (
   getState,
   { getFirebase, getFirestore }
 ) => {
-  console.log(newPresets);
   const firestore = getFirestore();
   return firestore
     .collection("settings")
