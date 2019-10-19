@@ -204,6 +204,7 @@ const CompWithFormik = withFormik({
   handleSubmit: (values, { props, setSubmitting }) => {
     setSubmitting(true);
     props.setFilterData(values);
+    props.nextStep();
   },
   validationSchema: Yup.object().shape({})
 })(Filter);
