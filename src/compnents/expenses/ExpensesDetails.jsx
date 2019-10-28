@@ -57,8 +57,9 @@ function ExpensesDetails({
   ]);
 
   const [fileName, setFileName] = useState(null);
+
   const handleFileChange = e => {
-    values.attachment = e.target.files[0];
+    values.newAttachment = e.target.files[0];
     if (e.target.files[0]) setFileName(e.target.files[0].name);
   };
   return (
@@ -176,7 +177,20 @@ function ExpensesDetails({
                     </Input>
                   </td>
                   <td width="15%">
-                    <Input tag={Field} name="status" />
+                    <Input
+                      tag={Field}
+                      component="select"
+                      type="select"
+                      name="status"
+                      onChange={handleChange}
+                      clasName="text-capitalize"
+                    >
+                      <option value="issued">issued</option>
+                      <option value="accepted">accepted</option>
+                      <option value="delayed">delayed</option>
+                      <option value="declined">declined</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </Input>
                   </td>
                   <td
                     width="10%"
@@ -226,7 +240,13 @@ function ExpensesDetails({
                       type="select"
                       name="type"
                       onChange={handleChange}
-                    />
+                    >
+                      <option value="20">חשבון / אישור תשלום</option>
+                      <option value="305">חשבונית מס</option>
+                      <option value="330">חשבונית מס / קבלה</option>
+                      <option value="400">קבלה</option>
+                      <option value="405">קבלה על תרומה</option>
+                    </Input>
                   </td>
                   <td width="13%">
                     <Input tag={Field} name="performa_invoice" />
@@ -361,9 +381,9 @@ const CompWithFormik = withFormik({
   }),
   enableReinitialize: true,
 
-  handleSubmit: (values, { props: { editExpense }, setSubmitting }) => {
+  handleSubmit: (values, { props: { editExpense, match }, setSubmitting }) => {
     setSubmitting(true);
-    editExpense(values);
+    editExpense(match.params.id, values);
   },
   validationSchema: Yup.object().shape({})
 })(ExpensesDetails);

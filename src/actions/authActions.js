@@ -28,41 +28,41 @@ export const googleLogin = () => async dispatch => {
       }
     });
   } else {
-    const teamMember = { id: teamRes.docs[0].id, ...teamRes.docs[0].data() };
-    const toggl = await verifyTogglUser(teamMember.email);
-    if (!toggl) {
-      await auth.signOut();
-      return dispatch({
-        type: LOGIN_ERROR,
-        payload: {
-          message: "User is not in Toggl Team , please contact your admin"
-        }
-      });
-    } else {
-      await db
-        .collection("team")
-        .doc(teamMember.id)
-        .update({
-          togglID: toggl.id
-        });
-    }
-    const asana = await verifyAssanaUser(teamMember.email);
-    if (!asana) {
-      await auth.signOut();
-      return dispatch({
-        type: LOGIN_ERROR,
-        payload: {
-          message: "User is not in Asana Team , please contact your admin"
-        }
-      });
-    } else {
-      await db
-        .collection("team")
-        .doc(teamMember.id)
-        .update({
-          asanaID: asana.gid
-        });
-    }
+    // const teamMember = { id: teamRes.docs[0].id, ...teamRes.docs[0].data() };
+    // const toggl = await verifyTogglUser(teamMember.email);
+    // if (!toggl) {
+    //   await auth.signOut();
+    //   return dispatch({
+    //     type: LOGIN_ERROR,
+    //     payload: {
+    //       message: "User is not in Toggl Team , please contact your admin"
+    //     }
+    //   });
+    // } else {
+    //   await db
+    //     .collection("team")
+    //     .doc(teamMember.id)
+    //     .update({
+    //       togglID: toggl.id
+    //     });
+    // }
+    // const asana = await verifyAssanaUser(teamMember.email);
+    // if (!asana) {
+    //   await auth.signOut();
+    //   return dispatch({
+    //     type: LOGIN_ERROR,
+    //     payload: {
+    //       message: "User is not in Asana Team , please contact your admin"
+    //     }
+    //   });
+    // } else {
+    //   await db
+    //     .collection("team")
+    //     .doc(teamMember.id)
+    //     .update({
+    //       asanaID: asana.gid
+    //     });
+    // }
   }
 
   dispatch({

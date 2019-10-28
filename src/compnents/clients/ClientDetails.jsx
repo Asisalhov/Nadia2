@@ -28,6 +28,7 @@ function ClientDetails({ client, getClient, match, editClient }) {
   const currencyRef = useRef();
   const payment_termsRef = useRef();
   const send_invoice_autoRef = useRef();
+  const nameRef = useRef();
 
   useEffect(() => {
     const getData = async () => {
@@ -54,6 +55,7 @@ function ClientDetails({ client, getClient, match, editClient }) {
       finance_email: finance_emailRef.current.value,
       currency: currencyRef.current.value,
       payment_terms: payment_termsRef.current.value,
+      name: nameRef.current.value,
       send_invoice_auto: send_invoice_autoRef.current.checked
     };
     await editClient(id, updClient);
@@ -72,7 +74,8 @@ function ClientDetails({ client, getClient, match, editClient }) {
     finance_email,
     currency,
     payment_terms,
-    send_invoice_auto
+    send_invoice_auto,
+    name = ""
   } = client;
 
   return (
@@ -93,7 +96,9 @@ function ClientDetails({ client, getClient, match, editClient }) {
             </Button>
             <Button
               size="lg"
-              className="btn-circle table-card-button "
+              className={`btn-circle table-card-button ${
+                !canEdit ? "disabled" : ""
+              }`}
               onClick={onSubmit}
             >
               <Done />
@@ -181,11 +186,12 @@ function ClientDetails({ client, getClient, match, editClient }) {
               <Table borderless className="table_card_table">
                 <thead>
                   <tr>
+                    <th width="15%">Name</th>
                     <th width="15%">finance contact</th>
                     <th colSpan="2">finance E-mail</th>
                     <th width="15%">currency</th>
                     <th width="13%">payment terms</th>
-                    <th colSpan="3">
+                    <th colSpan="2">
                       <div className="d-flex justify-content-around align-items-center">
                         <div>send invoice automaticaly</div>
                         <CustomInput
@@ -204,6 +210,13 @@ function ClientDetails({ client, getClient, match, editClient }) {
                 </thead>
                 <tbody>
                   <tr>
+                    <td width="13%">
+                      <Input
+                        innerRef={nameRef}
+                        name="name"
+                        defaultValue={name}
+                      />
+                    </td>
                     <td width="13%">
                       <Input
                         innerRef={finance_contactRef}

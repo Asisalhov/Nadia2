@@ -79,12 +79,23 @@ export const addExpense = newExpense => async (
     });
 };
 
-export const editExpense = (id, updExpense) => (
+export const editExpense = (id, updExpense) => async (
   dispatch,
   getState,
   { getFirebase, getFirestore }
 ) => {
   const firestore = getFirestore();
+  const firebase = getFirebase();
+  const storageRef = firebase.storage().ref("/attachments");
+
+  // if attachments : upload it
+  if (updExpense.newAttachment) {
+    const attachmentImage = await storageRef
+      .child(updExpense.newAttachment.name)
+      .put(updExpense.newAttachment);
+    updExpense.attachment = await attachmentImage.ref.getDownloadURL();
+    delete updExpense.newAttachment;
+  }
   return firestore
     .collection("expenses")
     .doc(id)

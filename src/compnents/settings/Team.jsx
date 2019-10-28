@@ -4,7 +4,8 @@ import history from "../../history";
 import { connect } from "react-redux";
 import { getTeamMembers } from "../../actions/usersActions";
 import { Table, Button, Badge, CustomInput } from "reactstrap";
-
+import { ReactComponent as Close } from "../../Icons/close.svg";
+import { FaTimes } from "react-icons/fa";
 import TableCard from "../layout/TableCard";
 import CardSearch from "../layout/CardSearch";
 import CardPagination from "../layout/CardPagination";
@@ -27,17 +28,30 @@ function Team({ getTeamMembers, team }) {
       <TableCard>
         <div className="d-flex">
           <CardSearch />
-          <Button
-            tag={Link}
-            to="/settings/team/new"
-            size="lg"
-            className="btn-circle table-card-button mr-2"
-            style={{
-              fontSize: "2rem"
-            }}
-          >
-            +
-          </Button>
+          <div className="d-flex justify-content-end w-25">
+            <Button
+              tag={Link}
+              to="/settings/team/new"
+              size="lg"
+              className="btn-circle table-card-button m-0 mr-2"
+              style={{
+                fontSize: "2rem"
+              }}
+            >
+              +
+            </Button>
+            <Button
+              tag={Link}
+              to="/settings/"
+              size="lg"
+              className="btn-circle table-card-button m-0 ml-1"
+              // style={{
+              //   fontSize: "1rem"
+              // }}
+            >
+              <FaTimes />
+            </Button>
+          </div>
         </div>
 
         <Table borderless hover className="table_card_table">
@@ -68,17 +82,13 @@ function Team({ getTeamMembers, team }) {
                   asana,
                   greeInVoice
                 }) => (
-                  <tr
-                    key={id}
-                    // onClick={() => redirectToClientDetails(id)}
-                    style={{
-                      cursor: "pointer"
-                    }}
-                  >
-                    <td>
-                      <Link to={`/settings/team/${id}`} style={{}}>
-                        {name}
-                      </Link>
+                  <tr key={id}>
+                    <td
+                      style={{
+                        cursor: "pointer"
+                      }}
+                    >
+                      <Link to={`/settings/team/${id}`}>{name}</Link>
                     </td>
                     <td>{email}</td>
                     <td>{role}</td>

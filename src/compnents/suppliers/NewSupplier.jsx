@@ -21,14 +21,14 @@ function NewSupplier({ handleChange, values, isSubmitting, addSupplier }) {
 
   return (
     <div>
-      <h3>New client</h3>
+      <h3>New Supplier</h3>
       <Form>
         <TableCard>
           <div className="d-flex justify-content-between table_card_header">
             <div className="d-flex">
               <Button
                 tag={Link}
-                to={`/clients/:id/edit`}
+                to={`/Suppliers/:id/edit`}
                 size="lg"
                 className="btn-circle table-card-button mr-2"
                 disabled
@@ -44,7 +44,7 @@ function NewSupplier({ handleChange, values, isSubmitting, addSupplier }) {
               </Button>
             </div>
             <div>
-              <Link to="/clients">
+              <Link to="/Suppliers">
                 <Close />
               </Link>
             </div>
@@ -115,7 +115,19 @@ function NewSupplier({ handleChange, values, isSubmitting, addSupplier }) {
                     />
                   </td>
                   <td width="15%">
-                    <Input tag={Field} name="currency" />
+                    <Input
+                      tag={Field}
+                      component="select"
+                      type="select"
+                      name="currnecy"
+                      onChange={handleChange}
+                    >
+                      <option value="ILS">ILS</option>
+                      <option value="USD">USD</option>
+                      <option value="EUR">EUR</option>
+                      <option value="GBP">GBP</option>
+                      <option value="RMB">RMB</option>
+                    </Input>
                   </td>
                   <td width="13%">
                     <Input

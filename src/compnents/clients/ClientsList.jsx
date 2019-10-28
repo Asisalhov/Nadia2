@@ -38,6 +38,7 @@ function ClientsList({ clients, getClients }) {
           <thead>
             <tr>
               <th>name</th>
+              <th>official name</th>
               <th>number</th>
               <th>contact name</th>
               <th className="text-center">active projects</th>
@@ -47,7 +48,14 @@ function ClientsList({ clients, getClients }) {
           {!loading ? (
             <tbody>
               {clients.map(
-                ({ id, official_name, number, contact_person, projects }) => (
+                ({
+                  id,
+                  official_name,
+                  number,
+                  contact_person,
+                  projects,
+                  name
+                }) => (
                   <tr
                     key={id}
                     onClick={() => redirectToClientDetails(id)}
@@ -55,6 +63,7 @@ function ClientsList({ clients, getClients }) {
                       cursor: "pointer"
                     }}
                   >
+                    <td>{name}</td>
                     <td>{official_name}</td>
                     <td>{number}</td>
                     <td>{contact_person}</td>

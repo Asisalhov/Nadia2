@@ -9,7 +9,8 @@ import CardSearch from "../layout/CardSearch";
 import CardPagination from "../layout/CardPagination";
 import Spinner from "../layout/Spinner";
 import { ReactComponent as AttachmentIcon } from "../../Icons/attachment.svg";
-
+import parse from "date-fns/parse";
+import format from "date-fns/format";
 function ExpensesList({ getExpenses, expenses }) {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -39,7 +40,7 @@ function ExpensesList({ getExpenses, expenses }) {
             overflowX: "scroll"
           }}
         >
-          <Table borderless hover className="table_card_table">
+          <Table borderless hover className="table_card_table expenses">
             <thead>
               <tr>
                 <th>handling data</th>
@@ -93,7 +94,12 @@ function ExpensesList({ getExpenses, expenses }) {
                         cursor: "pointer"
                       }}
                     >
-                      <td>{handling_date}</td>
+                      <td>
+                        {format(
+                          parse(handling_date, "yyyy-MM-dd", new Date()),
+                          "dd/MM/yyyy"
+                        )}
+                      </td>
                       <td>{supplier_name}</td>
                       <td>{client_name}</td>
                       <td>{project_name}</td>

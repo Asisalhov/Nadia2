@@ -184,6 +184,10 @@ a.login_forget_password {
 .table_card_table tr {
   max-height: 56px;
 }
+.table_card_table.expenses td,
+.table_card_table.expenses th {
+  padding: 1em 2.5em;
+}
 .table_card_header {
   color: #43425d;
   font-size: 1.2rem;

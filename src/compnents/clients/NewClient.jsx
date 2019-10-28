@@ -132,11 +132,13 @@ function NewClient({
             <Table borderless className="table_card_table">
               <thead>
                 <tr>
+                  <th width="15%">Name</th>
+
                   <th width="15%">finance contact</th>
                   <th colSpan="2">finance E-mail</th>
                   <th width="15%">currency</th>
                   <th width="13%">payment terms</th>
-                  <th colSpan="3">
+                  <th colSpan="2">
                     <div className="d-flex justify-content-around align-items-center">
                       <div>send invoice automaticaly</div>
                       <CustomInput
@@ -157,6 +159,14 @@ function NewClient({
               </thead>
               <tbody>
                 <tr>
+                  <td width="13%">
+                    <Input
+                      name="name"
+                      invalid={errors.name && touched.name}
+                      tag={Field}
+                    />
+                    <FormFeedback>{errors.name}</FormFeedback>
+                  </td>
                   <td width="13%">
                     <Input
                       name="finance_contact"
@@ -224,6 +234,7 @@ function NewClient({
 }
 const CompWithFormik = withFormik({
   mapPropsToValues: () => ({
+    name: "",
     official_name: "",
     number: "",
     contact_person: "",
@@ -242,6 +253,7 @@ const CompWithFormik = withFormik({
     props.addClient(values);
   },
   validationSchema: Yup.object().shape({
+    name: Yup.string().required("This Field is Required"),
     official_name: Yup.string().required("This Field is Required"),
     number: Yup.number().required("This Field is Required"),
     contact_person: Yup.string().required("This Field is Required"),

@@ -9,7 +9,7 @@ import {
   Label,
   Col,
   Input,
-  CustomInput,
+  FormFeedback,
   Button
 } from "reactstrap";
 import { DateRangePicker } from "react-date-range";
@@ -88,7 +88,7 @@ function Filter({
   });
   return (
     <Form>
-      <h3>Project P7L</h3>
+      <h3>Project P&L</h3>
       <TableCard>
         <fieldset disabled={loading || isSubmitting}>
           <Row form className="d-flex align-items-center">
@@ -101,6 +101,7 @@ function Filter({
                   component="select"
                   type="select"
                   name="client_id"
+                  invalid={errors.client_id && touched.client_id}
                   onChange={handleChange}
                 >
                   <option disabled selected value={null}>
@@ -110,6 +111,7 @@ function Filter({
                     <option value={client.id}>{client.official_name}</option>
                   ))}
                 </Input>
+                <FormFeedback>{errors.client_id}</FormFeedback>
               </FormGroup>
             </Col>
             <Col md={2}>
@@ -121,6 +123,7 @@ function Filter({
                   component="select"
                   type="select"
                   name="project_id"
+                  invalid={errors.project_id && touched.project_id}
                   onChange={handleChange}
                 >
                   <option disabled selected value={null}>
@@ -130,6 +133,7 @@ function Filter({
                     <option value={project.id}>{project.asanaData.name}</option>
                   ))}
                 </Input>
+                <FormFeedback>{errors.project_id}</FormFeedback>
               </FormGroup>
             </Col>
             <Col md={2}>
@@ -142,6 +146,7 @@ function Filter({
                   type="select"
                   name="phase"
                   onChange={handleChange}
+                  invalid={errors.phase && touched.phase}
                 >
                   <option disabled selected value={null}>
                     Select Phase
@@ -150,6 +155,7 @@ function Filter({
                     <option value={phase.name}>{phase.name}</option>
                   ))}
                 </Input>
+                <FormFeedback>{errors.phase}</FormFeedback>
               </FormGroup>
             </Col>
 
@@ -184,7 +190,11 @@ const CompWithFormik = withFormik({
     props.setFilterData(values);
     props.nextStep();
   },
-  validationSchema: Yup.object().shape({})
+  validationSchema: Yup.object().shape({
+    project_id: Yup.string().required("This Field is Required"),
+    phase: Yup.string().required("This Field is Required"),
+    client_id: Yup.string().required("This Field is Required")
+  })
 })(Filter);
 const mapStateToProps = state => ({
   clients: state.clients.clients,
