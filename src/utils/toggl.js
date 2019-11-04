@@ -63,6 +63,14 @@ export const createProject = async ({ name, hours }, projectName, clientID) => {
     );
   });
 };
+export const deleteProject = async id => {
+  return new Promise((resolve, reject) => {
+    toggl.deleteProject(id, (err, newProject) => {
+      if (err) reject(err);
+      resolve(newProject);
+    });
+  });
+};
 
 export const getTogglClientProjects = async clientID => {
   const workplace = await getWorkspace();

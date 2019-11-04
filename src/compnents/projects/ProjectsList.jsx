@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import history from "../../history";
 import { connect } from "react-redux";
-import { getProjects } from "../../actions/projectsActions";
+import { getProjects, deleteProject } from "../../actions/projectsActions";
 import { Table, Button, Badge } from "reactstrap";
+import { FaTrash } from "react-icons/fa";
 
 import TableCard from "../layout/TableCard";
 import CardSearch from "../layout/CardSearch";
@@ -13,7 +14,7 @@ import Spinner from "../layout/Spinner";
 // icon
 import { ReactComponent as AttachmentIcon } from "../../Icons/attachment.svg";
 
-function ProjectsList({ projects, getProjects }) {
+function ProjectsList({ projects, getProjects, deleteProject }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     const getData = async () => {
@@ -43,9 +44,10 @@ function ProjectsList({ projects, getProjects }) {
               <th>name</th>
               <th>client</th>
               <th>owner</th>
-              <th>status</th>
+              <th className="text-center">status</th>
               <th>due date</th>
               <th>attachments</th>
+              <th></th>
             </tr>
           </thead>
 
@@ -71,7 +73,7 @@ function ProjectsList({ projects, getProjects }) {
                     </td>
                     <td>{client_name}</td>
                     <td>{owner.name}</td>
-                    <td>
+                    <td className="text-center">
                       <Badge
                         color="primary"
                         style={{
@@ -84,7 +86,7 @@ function ProjectsList({ projects, getProjects }) {
                           color: "#4d4f5c"
                         }}
                         pill
-                        className="table-card-badge"
+                        className="table-card-badge "
                       >
                         {(current_status && current_status.text) || "-"}
                       </Badge>
@@ -103,6 +105,16 @@ function ProjectsList({ projects, getProjects }) {
                       >
                         <AttachmentIcon />
                       </a>
+                    </td>
+                    <td>
+                      <FaTrash
+                        className="text-danger"
+                        style={{
+                          cursor: "pointer",
+                          fontSize: "1.2em"
+                        }}
+                        onClick={() => deleteProject(id)}
+                      />
                     </td>
                   </tr>
                 )
@@ -125,6 +137,7 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   {
-    getProjects
+    getProjects,
+    deleteProject
   }
 )(ProjectsList);

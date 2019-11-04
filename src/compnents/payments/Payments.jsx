@@ -47,9 +47,9 @@ function Payments({ getPayments, payments }) {
                 <th>phase date</th>
                 <th>amount due</th>
                 <th>payment date</th>
-                <th>issue payment</th>
-                <th>get document</th>
-                <th>delete</th>
+                <th className="text-center">issue payment</th>
+                <th className="text-center">get document</th>
+                <th className="text-center">delete</th>
               </tr>
             </thead>
 
@@ -85,6 +85,7 @@ function Payments({ getPayments, payments }) {
                             fontSize: "1.5rem",
                             paddingTop: 0
                           }}
+                          className="text-center"
                         >
                           <PlusIcon
                             style={{
@@ -97,6 +98,7 @@ function Payments({ getPayments, payments }) {
                             fontSize: "1.5rem",
                             paddingTop: 0
                           }}
+                          className="text-center"
                         >
                           <GetIcon
                             style={{
@@ -109,6 +111,7 @@ function Payments({ getPayments, payments }) {
                             fontSize: "1.5rem",
                             paddingTop: 0
                           }}
+                          className="text-center"
                         >
                           <DeleteIcon
                             style={{

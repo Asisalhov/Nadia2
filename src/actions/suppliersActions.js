@@ -5,7 +5,7 @@ import {
   EDIT_SUPPLIER
 } from "./types";
 import history from "../history";
-
+import { addClient as addGIClient } from "../utils/greenInvoice";
 export const getSuppliers = () => (
   dispatch,
   getState,
@@ -51,9 +51,10 @@ export const addSupplier = newSupplier => async (
   { getFirebase, getFirestore }
 ) => {
   const firestore = getFirestore();
+  const GIClient = await addGIClient(newSupplier);
   return firestore
     .collection("suppliers")
-    .add(newSupplier)
+    .add({ ...newSupplier, greeninvoiceID: GIClient.id })
     .then(snapshot => {
       dispatch({
         type: ADD_SUPPLIER,

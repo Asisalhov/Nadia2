@@ -26,7 +26,7 @@ export const getProjects = async () => {
   const res = await client.workspaces.findAll();
   const workplace = res.data[0];
 
-  const projectsRes = await client.projects.findByWorkspace(workplace.id);
+  const projectsRes = await client.projects.findByWorkspace(workplace.gid);
   return projectsRes.data;
 };
 
@@ -40,8 +40,8 @@ export const createProject = async data => {
   const { name, notes, due_on, owner } = data;
   const res = await client.workspaces.findAll();
   const workplace = res.data[0];
-
-  const projectsRes = await client.projects.createInWorkspace(workplace.id, {
+  console.log(workplace);
+  const projectsRes = await client.projects.createInWorkspace(workplace.gid, {
     name,
     notes,
     color: "light-green",
@@ -53,6 +53,12 @@ export const createProject = async data => {
   return projectsRes;
 };
 
+export const deleteProject = async id => {
+  const projectsRes = await client.projects.delete(id);
+
+  return projectsRes;
+};
+
 /// tasks
 export const createTasks = async ({ projectID, data }) => {
   const res = await client.workspaces.findAll();
@@ -60,7 +66,7 @@ export const createTasks = async ({ projectID, data }) => {
   // add the project id in the data object
   // client.tasks.addProject();
   let tasksP = data.map(async ({ name, owner, due_date, hours, number }) => {
-    const task = await client.tasks.createInWorkspace(workplace.id, {
+    const task = await client.tasks.createInWorkspace(workplace.gid, {
       name,
       due_on: due_date
     });
@@ -82,12 +88,17 @@ export const createTask = async ({ projectID, data }) => {
   const workplace = res.data[0];
 
   const { name, owner, due_date, hours, number } = data;
-  const task = await client.tasks.createInWorkspace(workplace.id, {
+  const task = await client.tasks.createInWorkspace(workplace.gid, {
     name,
     due_on: due_date
   });
 
   await client.tasks.addProject(task.gid, { project: projectID });
+  return task;
+};
+export const deleteTask = async id => {
+  const task = await client.tasks.delete(id);
+
   return task;
 };
 

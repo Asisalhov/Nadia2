@@ -30,11 +30,15 @@ export const getClients = () => (
           id: doc.id,
           ...doc.data()
         }));
-        const asanaProjects = await Promise.all(
-          projects.map(
-            async project => await getAsanaProject(project.asanaProjectID)
-          )
-        );
+        const asanaProjects = (await Promise.all(
+          projects.map(async project => {
+            try {
+              return await getAsanaProject(project.asanaProjectID);
+            } catch (error) {
+              return null;
+            }
+          })
+        )).filter(e => e);
         client.projects = asanaProjects;
         return client;
       });

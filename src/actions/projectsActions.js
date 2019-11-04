@@ -1,16 +1,25 @@
-import { GET_PROJECTS, ADD_PROJECT, GET_PROJECT, EDIT_PROJECT } from "./types";
+import {
+  GET_PROJECTS,
+  ADD_PROJECT,
+  GET_PROJECT,
+  EDIT_PROJECT,
+  DELETE_PROJECT
+} from "./types";
 import history from "../history";
 import {
   createProject as createAsanaProject,
   createTask as createAsanaTask,
-  client as asana
+  client as asana,
+  deleteTask as deleteAsanaTask,
+  deleteProject as deleteAsanaProject
 } from "../utils/asana";
 import {
   createProject as createTogglProject,
   createTask as createTogglTask,
   getProjectTasks as getTogglProjectTasks,
   toggl,
-  getProjectDetails as getTogglProjectDetails
+  getProjectDetails as getTogglProjectDetails,
+  deleteProject as deleteTogglProject
 } from "../utils/toggl";
 
 export const getProjects = () => (
@@ -25,14 +34,17 @@ export const getProjects = () => (
     .then(async snapshot => {
       const projectsP = snapshot.docs.map(async doc => {
         const project = { id: doc.id, ...doc.data() };
-        project.asanaData = await asana.projects.findById(
-          project.asanaProjectID
-        );
-
-        return project;
+        try {
+          project.asanaData = await asana.projects.findById(
+            project.asanaProjectID
+          );
+          return project;
+        } catch (error) {
+          return null;
+        }
       });
 
-      const projects = await Promise.all(projectsP);
+      const projects = (await Promise.all(projectsP)).filter(p => p);
       dispatch({
         type: GET_PROJECTS,
         payload: projects
@@ -199,4 +211,41 @@ export const updatePhases = phases => async (
     type: EDIT_PROJECT,
     payload: { ...project }
   });
+};
+
+export const deleteProject = id => async (
+  dispatch,
+  getState,
+  { getFirebase, getFirestore }
+) => {
+  const firestore = getFirestore();
+  const projectdoc = await firestore
+    .collection("projects")
+    .doc(id)
+    .get();
+  const project = { id: projectdoc.id, ...projectdoc.data() };
+  console.log(project);
+
+  await deleteAsanaProject(+project.asanaProjectID);
+
+  const phasesDoc = await firestore
+    .collection("projects")
+    .doc(id)
+    .collection("phases")
+    .get();
+
+  const phases = phasesDoc.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  await Promise.all(phases.map(phase => deleteTogglProject(phase.togglTaskID)));
+
+  return firestore
+    .collection("projects")
+    .doc(id)
+    .delete()
+    .then(() =>
+      dispatch({
+        type: DELETE_PROJECT,
+        payload: id
+      })
+    )
+    .catch();
 };
