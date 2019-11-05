@@ -1,8 +1,9 @@
 import TogglClient from "toggl-api";
 import axios from "axios";
 export const toggl = new TogglClient({
-  apiToken: "ad1036e708276431da51861a1cf6bd0a"
+  apiToken: "ab0edeac57fd3b33949ee7d3e8266586"
 });
+console.log(toggl);
 var workplace = null;
 
 export const getProjectDetails = async projectID => {
@@ -17,7 +18,7 @@ export const getProjectDetails = async projectID => {
       },
       headers: {
         authorization:
-          "Basic YWQxMDM2ZTcwODI3NjQzMWRhNTE4NjFhMWNmNmJkMGE6YXBpX3Rva2Vu"
+          "Basic YWIwZWRlYWM1N2ZkM2IzMzk0OWVlN2QzZTgyNjY1ODY6YXBpX3Rva2Vu"
       }
     }
   );
