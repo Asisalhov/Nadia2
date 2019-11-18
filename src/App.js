@@ -38,7 +38,7 @@ import PrivateRoute from "./compnents/auth/PrivateRoute";
 import PublicRoute from "./compnents/auth/PublicRoute";
 import Home from "./compnents/home/Home";
 import Reports from "./compnents/reports/";
-// import WorkLoad from "./compnents/workload/workload2";
+import WorkLoad from "./compnents/workload/workload2";
 
 import { verifyUser } from "./actions/authActions";
 
@@ -89,7 +89,7 @@ function Panel() {
             <Route path="/suppliers" component={Suppliers} />
             <Route path="/reports" component={Reports} />
             <Route path="/home" component={Home} />
-            {/* <Route path="/workload" component={WorkLoad} /> */}
+            <Route path="/workload" component={WorkLoad} />
           </Switch>
         </div>
       </div>

@@ -16,6 +16,7 @@ import { ReactComponent as AttachmentIcon } from "../../Icons/attachment.svg";
 
 function ProjectsList({ projects, getProjects, deleteProject }) {
   const [loading, setLoading] = useState(true);
+  const [allProjects, setAllProjects] = useState([]);
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
@@ -24,6 +25,14 @@ function ProjectsList({ projects, getProjects, deleteProject }) {
     };
     getData();
   }, [getProjects]);
+  useEffect(() => {
+      setAllProjects(projects)
+  },[projects]);
+  const onSearchResult = (e) =>{
+    console.log(e.target.value)
+    const result = projects.filter(project=>(project.project_name.toLowerCase().includes(e.target.value.toLowerCase())))
+    setAllProjects(result)
+  }
 
   const redirectToProjectDetails = id => history.push(`/projects/${id}`);
 
@@ -32,7 +41,9 @@ function ProjectsList({ projects, getProjects, deleteProject }) {
       <h3>Projects</h3>
       <TableCard>
         <div className="d-flex">
-          <CardSearch />
+          <CardSearch 
+            onSearchResult={onSearchResult}
+          />
           <Button tag={Link} to="/projects/new" className="table-card-button">
             New Project
           </Button>
@@ -53,7 +64,7 @@ function ProjectsList({ projects, getProjects, deleteProject }) {
 
           {!loading ? (
             <tbody>
-              {projects.map(
+              {allProjects.map(
                 ({
                   id,
                   project_name = "google mini home",

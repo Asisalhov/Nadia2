@@ -11,25 +11,54 @@ import Spinner from "../layout/Spinner";
 import { ReactComponent as AttachmentIcon } from "../../Icons/attachment.svg";
 import parse from "date-fns/parse";
 import format from "date-fns/format";
-function ExpensesList({ getExpenses, expenses }) {
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      await getExpenses();
-      setLoading(false);
-    };
-    getData();
-  }, [getExpenses]);
-
-  const redirectToExpenseDetails = id => history.push(`/expenses/${id}`);
-
+class ExpensesList extends React.Component {
+  // const [loading, setLoading] = useState(false);
+  // const [allExpenses, setExpenses] = useState([]);
+  state={
+    loading: false,
+    allExpenses: []
+  }
+  UNSAFE_componentWillMount(){
+    this.setState({loading: true})
+    const setData = async ()=>{
+      await this.props.getExpenses();
+      this.setState({loading: false})
+  }
+    setData()
+  }
+  UNSAFE_componentWillReceiveProps(nextProps){
+    this.setState({allExpenses: nextProps.expenses})
+  }
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     setLoading(true);
+  //     await getExpenses();
+  //     setLoading(false);
+  //     // console.log( expenses)
+  //     setAllExpense()
+  //   };
+  //   getData();
+  // }, [getExpenses]);
+  // const setAllExpense = () => {
+  //   setExpenses(expenses)
+  //   console.log(expenses)
+  // }
+  onSearchResult = (e) =>{
+    console.log(e.target.value)
+    const result = this.props.expenses.filter(expense=>(expense.project_name.toLowerCase().includes(e.target.value.toLowerCase())))
+    e.preventDefault()
+    this.setState({allExpenses: result})
+  }
+  redirectToExpenseDetails = id => history.push(`/expenses/${id}`);
+render(){
   return (
     <div>
       <h3>Expenses</h3>
       <TableCard>
         <div className="d-flex">
-          <CardSearch />
+          <CardSearch 
+            onSearchResult={this.onSearchResult}
+          />
           <Button tag={Link} to="/expenses/new" className="table-card-button">
             New Expense
           </Button>
@@ -63,9 +92,9 @@ function ExpensesList({ getExpenses, expenses }) {
               </tr>
             </thead>
 
-            {!loading ? (
+            {!this.state.loading ? (
               <tbody>
-                {expenses.map(
+                {this.state.allExpenses.map(
                   ({
                     id,
                     handling_date,
@@ -89,7 +118,7 @@ function ExpensesList({ getExpenses, expenses }) {
                   }) => (
                     <tr
                       key={id}
-                      onClick={() => redirectToExpenseDetails(id)}
+                      onClick={() => this.redirectToExpenseDetails(id)}
                       style={{
                         cursor: "pointer"
                       }}
@@ -150,7 +179,7 @@ function ExpensesList({ getExpenses, expenses }) {
               </tbody>
             ) : null}
           </Table>
-          {loading ? <Spinner /> : null}
+          {this.state.loading ? <Spinner /> : null}
         </div>
 
         <div className="d-flex justify-content-end mt-3">
@@ -158,7 +187,7 @@ function ExpensesList({ getExpenses, expenses }) {
         </div>
       </TableCard>
     </div>
-  );
+  );}
 }
 const mapStateToProps = state => ({
   expenses: state.expenses.expenses

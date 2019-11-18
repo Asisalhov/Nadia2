@@ -86,16 +86,15 @@ let events = [
   }
 ];
 schedulerData.setEvents(events);
-
 function Workload() {
   return (
     <Scheduler
       schedulerData={schedulerData}
-      //   prevClick={this.prevClick}
-      //   nextClick={this.nextClick}
-      //   onSelectDate={this.onSelectDate}
-      //   onViewChange={this.onViewChange}
-      //   eventItemClick={this.eventClicked}
+      // prevClick={this.prevClick}
+      // nextClick={this.nextClick}
+      // onSelectDate={this.onSelectDate}
+      // onViewChange={this.onViewChange}
+      // eventItemClick={this.eventClicked}
     />
   );
 }
